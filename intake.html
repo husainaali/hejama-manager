@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl"> <!-- Set to RTL for Arabic Support -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Sayyida | Patient Intake Form</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="display: block; padding: 2rem 1rem;">
+
+    <div class="form-card">
+        <div class="form-header">
+            <h2>استمارة التاريخ الطبي</h2>
+            <p>Medical History & Intake Form</p>
+        </div>
+
+        <form id="intake-form">
+            <!-- Basic Information -->
+            <h3 class="section-title">المعلومات الأساسية (Basic Info)</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>الاسم الكامل (Full Name)</label>
+                    <input type="text" class="form-control" placeholder="أدخل الاسم..." required>
+                </div>
+                <div class="form-group">
+                    <label>تاريخ الميلاد (Date of Birth)</label>
+                    <input type="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف (Phone Number)</label>
+                    <input type="tel" class="form-control" placeholder="3345xxxx" required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الملف (File No.)</label>
+                    <input type="text" class="form-control" placeholder="0001">
+                </div>
+            </div>
+
+            <!-- Medical History Checklist -->
+            <h3 class="section-title">التاريخ الطبي (Medical History)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">هل تعانين من أحد الأمراض التالية؟ (Do you have any of these?)</p>
+            <div class="checkbox-grid">
+                <label class="checkbox-item">
+                    <input type="checkbox"> <span>ضغط الدم (Blood Pressure)</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox"> <span>سكري (Diabetes)</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox"> <span>أمراض القلب (Heart Disease)</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox"> <span>سرطان الدم (Leukemia)</span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>أمراض أخرى، حدد (Other diseases, specify):</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <!-- Specific Questions -->
+            <h3 class="section-title">أسئلة هامة (Important Questions)</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>هل سبق لك إجراء الحجامة؟ (Previous Hejama?)</label>
+                    <select class="form-control">
+                        <option>لا (No)</option>
+                        <option>نعم (Yes)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>هل تم تناول مميعات دم؟ (Blood thinners?)</label>
+                    <select class="form-control">
+                        <option>لا (No)</option>
+                        <option>نعم (Yes - Aspirin/Warfarin)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>هل يوجد حمل حالياً؟ (Are you pregnant?)</label>
+                    <select class="form-control">
+                        <option>لا (No)</option>
+                        <option>نعم (Yes)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>هل تعانين من حساسية؟ (Allergies?)</label>
+                    <input type="text" class="form-control" placeholder="معقمات، لاصق طبي...">
+                </div>
+            </div>
+
+            <!-- Body Map Placeholder -->
+            <h3 class="section-title">مواضع الحجامة (Cupping Map)</h3>
+            <div class="body-map-container">
+                <div style="text-align: center; color: #888;">
+                    <i class="fa-solid fa-person-dots-from-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Digital Body Map Loading...</p>
+                    <p style="font-size: 0.8rem;">(Specialists will mark points here)</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ملاحظات إضافية (Additional Notes):</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn" onclick="window.location.href='index.html'">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    رجوع (Back)
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    حفظ البيانات (Save Patient File)
+                    <i class="fa-solid fa-check"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('intake-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                full_name: e.target.querySelector('input[type="text"]').value,
+                dob: e.target.querySelectorAll('input')[1].value,
+                phone: e.target.querySelector('input[type="tel"]').value,
+                file_no: e.target.querySelectorAll('input')[3].value,
+                medical_history: {
+                    blood_pressure: e.target.querySelectorAll('input[type="checkbox"]')[0].checked,
+                    diabetes: e.target.querySelectorAll('input[type="checkbox"]')[1].checked,
+                    heart_disease: e.target.querySelectorAll('input[type="checkbox"]')[2].checked,
+                    leukemia: e.target.querySelectorAll('input[type="checkbox"]')[3].checked,
+                    other_diseases: e.target.querySelectorAll('input[type="text"]')[1].value,
+                    previous_hejama: e.target.querySelectorAll('select')[0].value === 'نعم (Yes)',
+                    blood_thinners: e.target.querySelectorAll('select')[1].value.includes('Yes'),
+                    pregnant: e.target.querySelectorAll('select')[2].value === 'نعم (Yes)',
+                    allergies: e.target.querySelectorAll('input[type="text"]')[2].value,
+                    additional_notes: e.target.querySelector('textarea').value
+                }
+            };
+
+            try {
+                const response = await fetch('api.php?action=add_patient', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('تم حفظ الملف بنجاح! | Patient File Saved Successfully!');
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error saving patient:', error);
+                alert('An error occurred while saving.');
+            }
+        });
+    </script>
+</body>
+</html>

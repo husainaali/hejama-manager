@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Sayyida | Reception Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-text">AL-SAYYIDA</div>
+            <p style="font-size: 0.7rem; color: var(--accent); margin-top: 5px;">Hejama Center</p>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="appointments.html" class="nav-link">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="patients.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Patients</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="specialist.html" class="nav-link">
+                    <i class="fa-solid fa-notes-medical"></i>
+                    <span>Specialist Team</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reminders.html" class="nav-link">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Automations</span>
+                </a>
+            </li>
+        </ul>
+
+        
+        <div class="sidebar-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="nav-link" style="color: #ff8080;">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="welcome-msg">
+                <h1>Reception Dashboard</h1>
+                <p>Welcome back, Sara. Here's what's happening today.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="new-patient-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    Quick Intake
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <p class="stat-title">Today's Appointments</p>
+                <h2 class="stat-value">12</h2>
+                <p style="color: var(--success); font-size: 0.8rem;"><i class="fa-solid fa-arrow-up"></i> 2 more than yesterday</p>
+            </div>
+            <div class="stat-card" style="border-left-color: var(--warning);">
+                <p class="stat-title">Waiting Room</p>
+                <h2 class="stat-value">3</h2>
+                <p style="color: var(--text-muted); font-size: 0.8rem;">Avg. wait: 15 mins</p>
+            </div>
+            <div class="stat-card" style="border-left-color: var(--accent);">
+                <p class="stat-title">New Files Created</p>
+                <h2 class="stat-value">5</h2>
+                <p style="color: var(--success); font-size: 0.8rem;">Target: 10/day</p>
+            </div>
+            <div class="stat-card" style="border-left-color: #2c2c2c;">
+                <p class="stat-title">Reminders Sent</p>
+                <h2 class="stat-value">24</h2>
+                <p style="color: var(--success); font-size: 0.8rem;"><i class="fa-solid fa-check-double"></i> 100% Delivery</p>
+            </div>
+        </section>
+
+        <!-- Main Grid -->
+        <div class="content-grid">
+            <div class="card">
+                <div class="tab-nav">
+                    <div class="tab-item active" onclick="switchTab('waiting')">Waiting Room (3)</div>
+                    <div class="tab-item" onclick="switchTab('scheduled')">Scheduled Today</div>
+                </div>
+
+                <!-- Waiting Room Content -->
+                <div id="waiting-content" class="tab-pane">
+                    <div class="waiting-grid">
+                        <div class="waiting-card">
+                            <div class="waiting-info">
+                                <h4>Mariam Yousif</h4>
+                                <span>Service: Wet Hejama</span><br>
+                                <div class="pulse-timer">Waiting: 18m</div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">
+                                Assign
+                            </button>
+                        </div>
+                        <div class="waiting-card">
+                            <div class="waiting-info">
+                                <h4>Sarah Ali</h4>
+                                <span>Service: Dry Hejama</span><br>
+                                <div class="pulse-timer">Waiting: 5m</div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">
+                                Assign
+                            </button>
+                        </div>
+                        <div class="waiting-card">
+                            <div class="waiting-info">
+                                <h4>Noor Hassan</h4>
+                                <span>Service: Massage</span><br>
+                                <div class="pulse-timer">Waiting: 2m</div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">
+                                Assign
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduled Content (Hidden by default) -->
+                <div id="scheduled-content" class="tab-pane" style="display: none;">
+                    <table class="appointment-list">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Time</th>
+                                <th>Specialist</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600;">Fatima Ahmed</td>
+                                <td>10:00 AM</td>
+                                <td>Dr. Laila</td>
+                                <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                                <td><button class="btn" style="padding: 5px 10px; font-size: 0.7rem;">Check In</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Specialist & Reminders Sidebar -->
+            <div class="sidebar-right">
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title">Specialists Status</div>
+                    <div class="specialist-status">
+                        <div class="status-dot dot-free"></div>
+                        <div class="waiting-info">
+                            <h4 style="font-size: 0.9rem;">Dr. Laila (Lead)</h4>
+                            <span style="font-size: 0.75rem; color: var(--success);">Available</span>
+                        </div>
+                    </div>
+                    <div class="specialist-status">
+                        <div class="status-dot dot-busy"></div>
+                        <div class="waiting-info">
+                            <h4 style="font-size: 0.9rem;">Dr. Sara</h4>
+                            <span style="font-size: 0.75rem; color: var(--error);">Treating Mariam</span>
+                        </div>
+                    </div>
+                    <div class="specialist-status">
+                        <div class="status-dot dot-free"></div>
+                        <div class="waiting-info">
+                            <h4 style="font-size: 0.9rem;">Therapist Amina</h4>
+                            <span style="font-size: 0.75rem; color: var(--success);">Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">System Reminders</div>
+                    <!-- Reminders same as before -->
+                
+                <div class="reminder-item">
+                    <div class="reminder-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div class="reminder-info">
+                        <h4>Daily Appointment Check</h4>
+                        <p>24 Emails sent to tomorrow's patients.</p>
+                    </div>
+                </div>
+
+                <div class="reminder-item">
+                    <div class="reminder-icon" style="background: #e1f5fe; color: #01579b;"><i class="fa-solid fa-cart-flatbed-suitcases"></i></div>
+                    <div class="reminder-info">
+                        <h4>Low Stock Alert</h4>
+                        <p>Sterile cups are below reorder point (15 left).</p>
+                    </div>
+                </div>
+
+                <div class="reminder-item" style="opacity: 0.6;">
+                    <div class="reminder-icon" style="background: #fff3e0; color: #e65100;"><i class="fa-solid fa-bell"></i></div>
+                    <div class="reminder-info">
+                        <h4>Follow-up Required</h4>
+                        <p>3 patients need 7-day follow-up calls.</p>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    Trigger Manual Sync
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

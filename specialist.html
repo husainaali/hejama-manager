@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Sayyida | Specialist Treatment Room</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .treatment-container {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        /* Body Map Styles */
+        .map-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .body-maps {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 1rem;
+        }
+
+        .map-wrapper {
+            position: relative;
+            width: 250px;
+            height: 500px;
+            background: #fdfaf7;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+        }
+
+        .body-svg {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        .cup-mark {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(184, 134, 11, 0.6);
+            border: 2px solid #8B4513;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+            pointer-events: auto;
+        }
+
+        .history-card {
+            background: #fff;
+            border-radius: var(--radius-md);
+            padding: 1.2rem;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .log-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .log-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-mark {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+
+    <header class="header" style="padding: 1rem 2rem; background: white; border-bottom: 1px solid #eee;">
+        <div class="welcome-msg">
+            <h1 style="font-size: 1.4rem;">Treatment Session: Mariam Yousif</h1>
+            <p>ID: #FILE-0092 | Specialist: Dr. Sara</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" onclick="window.location.href='index.html'">Exit Session</button>
+            <button class="btn btn-primary" id="save-session">Complete Session</button>
+        </div>
+    </header>
+
+    <div class="treatment-container">
+        <!-- Patient History Sidebar -->
+        <aside>
+            <h3 class="section-title">Medical Alert History</h3>
+            <div class="history-card" style="border-left-color: var(--error);">
+                <h4 style="color: var(--error);">Chronic Condition</h4>
+                <p style="font-size: 0.85rem;">Patient has <strong>Diabetes</strong> and <strong>Low Blood Pressure</strong>. Monitor dizziness.</p>
+            </div>
+            <div class="history-card">
+                <h4>Allergies</h4>
+                <p style="font-size: 0.85rem;">Sensitive to medical tape adhesives.</p>
+            </div>
+            <div class="history-card" style="border-left-color: var(--warning);">
+                <h4>Previous Notes</h4>
+                <p style="font-size: 0.85rem;">Last session: Heavy blood density on back sites (C7, T1).</p>
+            </div>
+        </aside>
+
+        <!-- Interactive Body Map -->
+        <section class="map-section">
+            <h3 class="section-title">Interactive Cupping Map</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Click on the diagrams to mark cupping sites.</p>
+            
+            <div class="body-maps">
+                <div class="map-wrapper" id="map-front">
+                    <p style="position: absolute; top: 10px; font-weight: bold;">FRONT</p>
+                    <svg class="body-svg" viewBox="0 0 100 200">
+                        <!-- Simplified Body Path -->
+                        <path d="M50,10 Q60,10 65,20 L65,40 Q65,60 80,60 L80,100 L70,180 L50,180 L30,180 L20,100 L20,60 Q35,60 35,40 L35,20 Q40,10 50,10" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="map-wrapper" id="map-back">
+                    <p style="position: absolute; top: 10px; font-weight: bold;">BACK</p>
+                    <svg class="body-svg" viewBox="0 0 100 200">
+                         <path d="M50,10 Q60,10 65,20 L65,40 Q65,60 80,60 L80,100 L70,180 L50,180 L30,180 L20,100 L20,60 Q35,60 35,40 L35,20 Q40,10 50,10" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+                <span style="font-size: 0.8rem;"><i class="fa-solid fa-circle" style="color: var(--primary);"></i> Wet Hejama</span>
+                <span style="font-size: 0.8rem;"><i class="fa-solid fa-circle" style="color: #ccc;"></i> Dry Hejama</span>
+            </div>
+        </section>
+
+        <!-- Treatment Log -->
+        <section class="log-section">
+            <h3 class="section-title">Session Observations</h3>
+            <div class="form-group">
+                <label>Type of Cupping</label>
+                <div class="checkbox-grid" style="grid-template-columns: 1fr; margin-bottom: 1rem;">
+                    <label class="checkbox-item"><input type="checkbox" checked> <span>Wet Hejama (رطبة)</span></label>
+                    <label class="checkbox-item"><input type="checkbox"> <span>Dry Hejama (جافة)</span></label>
+                    <label class="checkbox-item"><input type="checkbox"> <span>Sliding Hejama (متزحلقة)</span></label>
+                </div>
+            </div>
+
+            <div class="log-grid">
+                <div class="form-group">
+                    <label>Cup Count (عدد الكؤوس)</label>
+                    <input type="number" class="form-control" value="7">
+                </div>
+                <div class="form-group">
+                    <label>Blood Density (كثافة الدم)</label>
+                    <select class="form-control">
+                        <option>Normal (عادي)</option>
+                        <option>Thick (كثيف)</option>
+                        <option>Very Thick (كثيف جداً)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Blood Color (لون الدم)</label>
+                <select class="form-control">
+                    <option>Bright Red (أحمر فاتح)</option>
+                    <option>Dark Red (أحمر غامق)</option>
+                    <option>Blackish (مائل للسواد)</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Specialist Notes</label>
+                <textarea class="form-control" rows="5" placeholder="Add observations here..."></textarea>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Interactive Marker Logic
+        let cupCount = 0;
+        document.querySelectorAll('.map-wrapper').forEach(map => {
+            map.addEventListener('click', (e) => {
+                if (e.target.classList.contains('cup-mark')) {
+                    e.target.remove();
+                    return;
+                }
+                
+                const rect = map.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const mark = document.createElement('div');
+                mark.className = 'cup-mark';
+                mark.style.left = `${x}px`;
+                mark.style.top = `${y}px`;
+                cupCount++;
+                mark.innerText = cupCount;
+                
+                map.appendChild(mark);
+            });
+        });
+
+        document.getElementById('save-session').addEventListener('click', () => {
+            alert('Session Completed! Report generated and saved to patient file.');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
