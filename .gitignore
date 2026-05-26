@@ -1,0 +1,23 @@
+# Configuration files with sensitive data
+config.php
+
+# Database setup file (security risk)
+setup_db.php
+
+# Node modules
+node_modules/
+package-lock.json
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

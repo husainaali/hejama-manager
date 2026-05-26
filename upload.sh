@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# FTP Credentials
-FTP_USER="u640030385"
-FTP_PASS="H@952026h"
-FTP_HOST="82.29.189.217"
-REMOTE_PATH="domains/limegreen-stingray-564605.hostingersite.com/public_html"
+# Load configuration from PHP config file
+eval $(php -r "
+require_once 'config.php';
+echo 'FTP_USER=\"' . FTP_USER . '\" ';
+echo 'FTP_PASS=\"' . FTP_PASS . '\" ';
+echo 'FTP_HOST=\"' . FTP_HOST . '\" ';
+echo 'REMOTE_PATH=\"' . FTP_REMOTE_PATH . '\" ';
+")
 
 FILES=(
     "index.html"

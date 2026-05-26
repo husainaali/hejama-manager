@@ -1,0 +1,26 @@
+{
+  "name": "hejama-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint app.js",
+    "lint:fix": "eslint app.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/husainaali/hejama-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/husainaali/hejama-manager/issues"
+  },
+  "homepage": "https://github.com/husainaali/hejama-manager#readme",
+  "devDependencies": {
+    "eslint": "^10.4.0"
+  }
+}
