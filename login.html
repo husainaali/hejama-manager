@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Al-Sayyida | Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #c49a6c;
+        --primary-dark: #a67c52;
+        --primary-light: #e6d5c3;
+        --accent: #d4af37;
+        --secondary: #2c2c2c;
+        --bg-main: #fcfaf7;
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      body {
+        background: var(--bg-main);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image:
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(196, 154, 108, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(212, 175, 55, 0.08) 0%,
+            transparent 50%
+          );
+      }
+      .login-wrapper {
+        width: 100%;
+        max-width: 440px;
+        padding: 1rem;
+      }
+      .login-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 3rem 2.5rem;
+        box-shadow: var(--shadow-lg);
+      }
+      .brand {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      .brand-name {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .brand-sub {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 4px;
+        letter-spacing: 1px;
+      }
+      .brand-divider {
+        width: 50px;
+        height: 2px;
+        background: var(--primary-light);
+        margin: 1rem auto 0;
+        border-radius: 2px;
+      }
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 0.3rem;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 2rem;
+      }
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 6px;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #bbb;
+        font-size: 0.95rem;
+        pointer-events: none;
+      }
+      .input-wrap .toggle-pw {
+        left: auto;
+        right: 14px;
+        pointer-events: auto;
+        cursor: pointer;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.6rem;
+        border: 1.5px solid #e8e8e8;
+        border-radius: var(--radius-sm);
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: #fafafa;
+        outline: none;
+      }
+      input:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(196, 154, 108, 0.15);
+      }
+      .btn-login {
+        width: 100%;
+        padding: 0.85rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-login:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(196, 154, 108, 0.3);
+      }
+      .btn-login:disabled {
+        opacity: 0.7;
+        transform: none;
+        cursor: not-allowed;
+      }
+      .error-msg {
+        background: #fff5f5;
+        color: #c0392b;
+        border: 1px solid #ffd5d5;
+        padding: 0.7rem 1rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+        display: none;
+      }
+      .guest-link {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+        color: #999;
+      }
+      .guest-link a {
+        color: var(--primary-dark);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .guest-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-card">
+        <div class="brand">
+          <div class="brand-name">AL-SAYYIDA</div>
+          <div class="brand-sub">HEJAMA CENTER — STAFF PORTAL</div>
+          <div class="brand-divider"></div>
+        </div>
+
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to access the management system</p>
+
+        <div class="error-msg" id="error-msg">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="error-text">Invalid username or password.</span>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                autocomplete="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock"></i>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+              <i
+                class="fa-solid fa-eye toggle-pw"
+                id="toggle-pw"
+                title="Show/hide password"
+              ></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login" id="btn-login">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Sign In
+          </button>
+        </form>
+
+        <div class="guest-link">
+          Patient? <a href="guest.html">Check your appointments here</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // If already logged in, redirect to dashboard
+      fetch("api.php?action=auth_check")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.authenticated) window.location.href = "index.html";
+        })
+        .catch(() => {});
+
+      // Password toggle
+      document.getElementById("toggle-pw").addEventListener("click", () => {
+        const pw = document.getElementById("password");
+        const icon = document.getElementById("toggle-pw");
+        if (pw.type === "password") {
+          pw.type = "text";
+          icon.className = "fa-solid fa-eye-slash toggle-pw";
+        } else {
+          pw.type = "password";
+          icon.className = "fa-solid fa-eye toggle-pw";
+        }
+      });
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btn-login");
+          const errorEl = document.getElementById("error-msg");
+          const errorText = document.getElementById("error-text");
+
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+          errorEl.style.display = "none";
+
+          try {
+            const res = await fetch("api.php?action=login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: document.getElementById("username").value.trim(),
+                password: document.getElementById("password").value,
+              }),
+            });
+            const data = await res.json();
+            if (data.success) {
+              window.location.href = "index.html";
+            } else {
+              errorText.textContent =
+                data.error || "Invalid username or password.";
+              errorEl.style.display = "block";
+              btn.disabled = false;
+              btn.innerHTML =
+                '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+            }
+          } catch {
+            errorText.textContent = "Connection error. Please try again.";
+            errorEl.style.display = "block";
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+          }
+        });
+    </script>
+  </body>
+</html>

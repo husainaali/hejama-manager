@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Al-Sayyida | Appointments</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .toolbar {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.5rem;
+      }
+      .toolbar input[type="date"],
+      .toolbar select {
+        padding: 0.6rem 1rem;
+        border: 1.5px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 0.9rem;
+        outline: none;
+        transition: var(--transition);
+        font-family: "Inter", sans-serif;
+      }
+      .toolbar input[type="date"]:focus,
+      .toolbar select:focus {
+        border-color: var(--primary);
+      }
+      .toolbar label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .appointments-table-wrap {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+      .appointment-list td,
+      .appointment-list th {
+        vertical-align: middle;
+      }
+      .action-btns {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .btn-sm {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        transition: var(--transition);
+      }
+      .btn-checkin {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .btn-checkin:hover {
+        background: #c8e6c9;
+      }
+      .btn-start {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .btn-start:hover {
+        background: #bbdefb;
+      }
+      .btn-complete {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .btn-complete:hover {
+        background: #d5b89a;
+      }
+      .btn-cancel {
+        background: #ffebee;
+        color: #c62828;
+      }
+      .btn-cancel:hover {
+        background: #ffcdd2;
+      }
+      .status-in-progress {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .status-completed {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .status-cancelled {
+        background: #f5f5f5;
+        color: #757575;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        width: 100%;
+        max-width: 520px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        animation: slideUp 0.25s ease;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .modal-header h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        padding: 4px;
+      }
+      .modal-close:hover {
+        color: var(--error);
+      }
+      .form-group {
+        margin-bottom: 1.1rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text-main);
+      }
+      .form-control {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border: 1.5px solid #e8e8e8;
+        border-radius: var(--radius-sm);
+        font-size: 0.95rem;
+        font-family: "Inter", sans-serif;
+        outline: none;
+        transition: var(--transition);
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(196, 154, 108, 0.15);
+      }
+      .modal-actions {
+        display: flex;
+        gap: 0.8rem;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+      }
+      .btn-secondary {
+        padding: 0.65rem 1.2rem;
+        background: #f0f0f0;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: var(--transition);
+      }
+      .btn-secondary:hover {
+        background: #e0e0e0;
+      }
+      .empty-row td {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <button class="menu-toggle"><i class="fa-solid fa-bars"></i></button>
+
+    <aside class="sidebar">
+      <div class="logo-area">
+        <div class="logo-text">AL-SAYYIDA</div>
+        <p style="font-size: 0.7rem; color: var(--accent); margin-top: 5px">
+          Hejama Center
+        </p>
+      </div>
+      <ul class="nav-links" id="nav-links"></ul>
+      <div
+        class="sidebar-footer"
+        style="
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        "
+      >
+        <a href="logout.php" class="nav-link" style="color: #ff8080">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <div class="welcome-msg">
+          <h1>Appointments</h1>
+          <p>Manage and schedule patient appointments</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-new-appt">
+            <i class="fa-solid fa-plus"></i> New Appointment
+          </button>
+        </div>
+      </header>
+
+      <!-- Toolbar / Filters -->
+      <div class="toolbar">
+        <label>Date:</label>
+        <input type="date" id="filter-date" />
+        <label>Status:</label>
+        <select id="filter-status">
+          <option value="">All Statuses</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Waiting">Waiting</option>
+          <option value="In-Progress">In-Progress</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <label>Specialist:</label>
+        <select id="filter-specialist">
+          <option value="">All Specialists</option>
+        </select>
+        <button
+          class="btn btn-primary"
+          id="btn-filter"
+          style="padding: 0.6rem 1rem"
+        >
+          <i class="fa-solid fa-filter"></i> Filter
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="appointments-table-wrap">
+        <table class="appointment-list">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Date & Time</th>
+              <th>Specialist</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="appt-tbody">
+            <tr class="empty-row">
+              <td colspan="5">
+                <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- New Appointment Modal -->
+    <div class="modal-overlay" id="modal-new">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fa-solid fa-calendar-plus"></i> New Appointment</h3>
+          <button class="modal-close" id="modal-close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>Patient (search by name / CPR)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="patient-search"
+            placeholder="Start typing..."
+            autocomplete="off"
+          />
+          <div
+            id="patient-suggestions"
+            style="
+              position: relative;
+              background: white;
+              border: 1px solid #eee;
+              border-radius: var(--radius-sm);
+              max-height: 180px;
+              overflow-y: auto;
+              display: none;
+              z-index: 10;
+            "
+          ></div>
+          <input type="hidden" id="selected-patient-id" />
+        </div>
+
+        <div class="form-group">
+          <label>Date & Time</label>
+          <input
+            type="datetime-local"
+            class="form-control"
+            id="appt-datetime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Specialist</label>
+          <select class="form-control" id="appt-specialist">
+            <option value="">— Assign later —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea
+            class="form-control"
+            id="appt-notes"
+            rows="2"
+            placeholder="Service type, requests..."
+          ></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" id="modal-cancel">Cancel</button>
+          <button class="btn btn-primary" id="btn-save-appt">
+            <i class="fa-solid fa-check"></i> Book Appointment
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      let specialists = [];
+      let currentUser = null;
+
+      async function init() {
+        // Set default date to today
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("filter-date").value = today;
+
+        // Load specialists for dropdowns
+        const sRes = await fetch("api.php?action=get_specialists");
+        specialists = await sRes.json();
+        const selFilter = document.getElementById("filter-specialist");
+        const selModal = document.getElementById("appt-specialist");
+        specialists.forEach((s) => {
+          selFilter.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+          selModal.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        });
+
+        loadAppointments();
+      }
+
+      async function loadAppointments() {
+        const date = document.getElementById("filter-date").value;
+        const status = document.getElementById("filter-status").value;
+        const specId = document.getElementById("filter-specialist").value;
+
+        let url = "api.php?action=get_appointments";
+        if (date) url += "&date=" + date;
+        if (status) url += "&status=" + encodeURIComponent(status);
+        if (specId) url += "&specialist_id=" + specId;
+
+        const res = await fetch(url);
+        const appts = await res.json();
+        renderTable(appts);
+      }
+
+      function statusClass(s) {
+        const map = {
+          Scheduled: "status-confirmed",
+          Waiting: "status-waiting",
+          "In-Progress": "status-in-progress",
+          Completed: "status-completed",
+          Cancelled: "status-cancelled",
+        };
+        return map[s] || "";
+      }
+
+      function actionButtons(appt) {
+        const role = currentUser?.role;
+        let btns = "";
+        if (
+          appt.status === "Scheduled" &&
+          ["super_admin", "reception"].includes(role)
+        ) {
+          btns += `<button class="btn-sm btn-checkin" onclick="updateStatus(${appt.id},'Waiting')">Check In</button>`;
+        }
+        if (
+          appt.status === "Waiting" &&
+          ["super_admin", "reception", "specialist"].includes(role)
+        ) {
+          btns += `<button class="btn-sm btn-start" onclick="updateStatus(${appt.id},'In-Progress')">Start</button>`;
+        }
+        if (
+          appt.status === "In-Progress" &&
+          ["super_admin", "specialist"].includes(role)
+        ) {
+          btns += `<button class="btn-sm btn-complete" onclick="openSession(${appt.id},${appt.patient_id})">Session</button>`;
+        }
+        if (
+          !["Completed", "Cancelled"].includes(appt.status) &&
+          ["super_admin", "reception"].includes(role)
+        ) {
+          btns += `<button class="btn-sm btn-cancel" onclick="updateStatus(${appt.id},'Cancelled')">Cancel</button>`;
+        }
+        return btns || "—";
+      }
+
+      function renderTable(appts) {
+        const tbody = document.getElementById("appt-tbody");
+        if (!appts.length) {
+          tbody.innerHTML =
+            '<tr class="empty-row"><td colspan="5"><i class="fa-regular fa-calendar-xmark"></i> No appointments found</td></tr>';
+          return;
+        }
+        tbody.innerHTML = appts
+          .map((a) => {
+            const dt = new Date(a.appointment_date);
+            const dateStr = dt.toLocaleDateString("en-BH", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            });
+            const timeStr = dt.toLocaleTimeString("en-BH", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            return `<tr>
+            <td>
+              <strong>${a.patient_name}</strong><br>
+              <span style="font-size:0.75rem;color:var(--text-muted)">${a.patient_cpr || ""}</span>
+            </td>
+            <td>${dateStr}<br><span style="color:var(--text-muted);font-size:0.85rem">${timeStr}</span></td>
+            <td>${a.specialist_name || '<span style="color:var(--text-muted)">TBD</span>'}</td>
+            <td><span class="status-badge ${statusClass(a.status)}">${a.status}</span></td>
+            <td><div class="action-btns">${actionButtons(a)}</div></td>
+          </tr>`;
+          })
+          .join("");
+      }
+
+      async function updateStatus(id, status) {
+        await fetch("api.php?action=update_appointment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, status }),
+        });
+        loadAppointments();
+      }
+
+      function openSession(apptId, patientId) {
+        window.location.href = `specialist.html?appt_id=${apptId}&patient_id=${patientId}`;
+      }
+
+      // ── New Appointment Modal ──
+      document.getElementById("btn-new-appt").addEventListener("click", () => {
+        document.getElementById("modal-new").classList.add("open");
+        // Default datetime = now + 1 hour
+        const dt = new Date(Date.now() + 3600000);
+        dt.setSeconds(0, 0);
+        document.getElementById("appt-datetime").value = dt
+          .toISOString()
+          .slice(0, 16);
+      });
+
+      function closeModal() {
+        document.getElementById("modal-new").classList.remove("open");
+        document.getElementById("patient-search").value = "";
+        document.getElementById("selected-patient-id").value = "";
+        document.getElementById("patient-suggestions").style.display = "none";
+      }
+      document
+        .getElementById("modal-close")
+        .addEventListener("click", closeModal);
+      document
+        .getElementById("modal-cancel")
+        .addEventListener("click", closeModal);
+      document.getElementById("modal-new").addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      // Patient search autocomplete
+      let searchTimer;
+      document
+        .getElementById("patient-search")
+        .addEventListener("input", (e) => {
+          clearTimeout(searchTimer);
+          const q = e.target.value.trim();
+          if (q.length < 2) {
+            document.getElementById("patient-suggestions").style.display =
+              "none";
+            return;
+          }
+          searchTimer = setTimeout(async () => {
+            const res = await fetch(
+              `api.php?action=get_patients&q=${encodeURIComponent(q)}`,
+            );
+            const patients = await res.json();
+            const box = document.getElementById("patient-suggestions");
+            if (!patients.length) {
+              box.style.display = "none";
+              return;
+            }
+            box.style.display = "block";
+            box.innerHTML = patients
+              .slice(0, 8)
+              .map(
+                (p) =>
+                  `<div onclick="selectPatient(${p.id},'${escJs(p.full_name)}')" style="padding:8px 12px;cursor:pointer;font-size:0.9rem;border-bottom:1px solid #f0f0f0" onmouseover="this.style.background='#fdfaf7'" onmouseout="this.style.background=''">
+                <strong>${p.full_name}</strong> <span style="color:#999;font-size:0.8rem">${p.cpr || p.phone || ""}</span>
+              </div>`,
+              )
+              .join("");
+          }, 300);
+        });
+
+      function selectPatient(id, name) {
+        document.getElementById("patient-search").value = name;
+        document.getElementById("selected-patient-id").value = id;
+        document.getElementById("patient-suggestions").style.display = "none";
+      }
+
+      document
+        .getElementById("btn-save-appt")
+        .addEventListener("click", async () => {
+          const patientId = document.getElementById(
+            "selected-patient-id",
+          ).value;
+          const datetime = document.getElementById("appt-datetime").value;
+          if (!patientId) {
+            alert("Please select a patient.");
+            return;
+          }
+          if (!datetime) {
+            alert("Please select a date and time.");
+            return;
+          }
+          const res = await fetch("api.php?action=add_appointment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              patient_id: patientId,
+              appointment_date: datetime,
+              specialist_id:
+                document.getElementById("appt-specialist").value || null,
+              notes: document.getElementById("appt-notes").value,
+              status: "Scheduled",
+            }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            closeModal();
+            loadAppointments();
+          } else {
+            alert("Error: " + (data.error || "Could not book appointment."));
+          }
+        });
+
+      document
+        .getElementById("btn-filter")
+        .addEventListener("click", loadAppointments);
+
+      function escJs(s) {
+        return String(s).replace(/'/g, "\\'");
+      }
+
+      // Called by app.js after auth resolves
+      window.onAuthReady = function (user) {
+        currentUser = user;
+        init();
+      };
+    </script>
+  </body>
+</html>

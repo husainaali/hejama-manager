@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>السيدة | بوابة المريضة</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #c49a6c;
+        --primary-dark: #a67c52;
+        --primary-light: #e6d5c3;
+        --accent: #d4af37;
+        --secondary: #2c2c2c;
+        --bg: #fcfaf7;
+        --card: #ffffff;
+        --text: #333;
+        --muted: #888;
+        --success: #4caf50;
+        --r-lg: 16px;
+        --r-md: 12px;
+        --r-sm: 8px;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --tr: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Tajawal", "Inter", sans-serif;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      /* ── Header ── */
+      .top-bar {
+        background: var(--secondary);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .top-bar .brand {
+        color: var(--accent);
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+      .top-bar .brand span {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.75rem;
+        font-weight: 400;
+        display: block;
+        letter-spacing: 0;
+      }
+      .staff-link {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: var(--tr);
+      }
+      .staff-link:hover {
+        color: var(--accent);
+      }
+
+      /* ── Lookup screen ── */
+      .page {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+      .page.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .lookup-wrapper {
+        max-width: 480px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+        text-align: center;
+      }
+      .lookup-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: var(--primary-dark);
+      }
+      .lookup-wrapper h1 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+      }
+      .lookup-wrapper p {
+        color: var(--muted);
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+      .lookup-card {
+        background: var(--card);
+        border-radius: var(--r-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        text-align: right;
+      }
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+      label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--secondary);
+      }
+      label span {
+        font-weight: 400;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap i {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #bbb;
+        pointer-events: none;
+      }
+      input[type="text"],
+      input[type="tel"] {
+        width: 100%;
+        padding: 0.8rem 2.6rem 0.8rem 1rem;
+        border: 1.5px solid #e8e8e8;
+        border-radius: var(--r-sm);
+        font-size: 1rem;
+        font-family: "Inter", sans-serif;
+        outline: none;
+        transition: var(--tr);
+        background: #fafafa;
+        direction: ltr;
+        text-align: right;
+      }
+      input:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(196, 154, 108, 0.15);
+      }
+      .btn-lookup {
+        width: 100%;
+        padding: 0.9rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--r-sm);
+        font-size: 1rem;
+        font-weight: 700;
+        font-family: "Tajawal", sans-serif;
+        cursor: pointer;
+        transition: var(--tr);
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-lookup:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(196, 154, 108, 0.3);
+      }
+      .btn-lookup:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .error-msg {
+        background: #fff5f5;
+        color: #c0392b;
+        border: 1px solid #ffd5d5;
+        border-radius: var(--r-sm);
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+        display: none;
+      }
+
+      /* ── Results screen ── */
+      .results-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      .results-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .results-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--secondary);
+      }
+      .results-header p {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .btn-back {
+        padding: 0.6rem 1.2rem;
+        background: #f0f0f0;
+        border: none;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-family: "Tajawal", sans-serif;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--tr);
+      }
+      .btn-back:hover {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+
+      .section-label {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin: 2rem 0 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-light);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-label i {
+        color: var(--primary);
+      }
+
+      /* Upcoming appointments */
+      .appt-card {
+        background: var(--card);
+        border-radius: var(--r-md);
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 0.8rem;
+        box-shadow: var(--shadow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .appt-date {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--secondary);
+      }
+      .appt-time {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .appt-specialist {
+        font-size: 0.85rem;
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+      .status-chip {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .chip-scheduled {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .chip-waiting {
+        background: #fff3e0;
+        color: #ef6c00;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--muted);
+        background: var(--card);
+        border-radius: var(--r-md);
+        font-size: 0.9rem;
+      }
+      .empty-state i {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #ddd;
+      }
+
+      /* Session cards */
+      .session-card {
+        background: var(--card);
+        border-radius: var(--r-lg);
+        padding: 1.5rem;
+        margin-bottom: 1.2rem;
+        box-shadow: var(--shadow);
+      }
+      .session-meta {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      .session-date {
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--secondary);
+      }
+      .session-spec {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .session-chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .chip {
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .patient-note {
+        background: #fdfaf7;
+        border: 1px solid var(--primary-light);
+        border-radius: var(--r-sm);
+        padding: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #555;
+        margin-bottom: 1rem;
+      }
+      .patient-note strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--primary-dark);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Body map (read-only) */
+      .body-map-section {
+        margin-top: 1rem;
+      }
+      .body-map-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .maps-row {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .map-container {
+        position: relative;
+        width: 160px;
+        flex-shrink: 0;
+      }
+      .map-label {
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .map-svg-wrap {
+        position: relative;
+        width: 160px;
+        height: 300px;
+        background: #fdfaf7;
+        border-radius: var(--r-md);
+        border: 1px solid #eee;
+        overflow: hidden;
+      }
+      .map-svg-wrap svg {
+        width: 100%;
+        height: 100%;
+      }
+      .cup-dot {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: rgba(196, 154, 108, 0.75);
+        border: 2px solid var(--primary-dark);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        color: white;
+        pointer-events: none;
+      }
+      .cup-dot.dry {
+        background: rgba(180, 180, 180, 0.75);
+        border-color: #888;
+      }
+
+      @media (max-width: 600px) {
+        .lookup-wrapper {
+          margin: 2rem auto;
+        }
+        .results-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="brand">
+        AL-SAYYIDA
+        <span>مركز الحجامة النسائي</span>
+      </div>
+      <a href="login.html" class="staff-link">
+        <i class="fa-solid fa-lock"></i> دخول الموظفين
+      </a>
+    </div>
+
+    <!-- ── Lookup Page ── -->
+    <div class="page active" id="page-lookup">
+      <div class="lookup-wrapper">
+        <div class="lookup-icon">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+        <h1>متابعة مواعيدك</h1>
+        <p>
+          أدخلي رقمك الوطني ورقم هاتفك لعرض مواعيدك<br />
+          وملاحظات المختصة وخريطة مواضع الحجامة
+        </p>
+
+        <div class="lookup-card">
+          <div class="error-msg" id="lookup-error">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span id="error-text"></span>
+          </div>
+
+          <form id="lookup-form">
+            <div class="form-group">
+              <label>
+                الرقم الوطني (CPR)
+                <span>National ID</span>
+              </label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-id-card"></i>
+                <input
+                  type="tel"
+                  id="national-id"
+                  placeholder="XXXXXXXXX"
+                  inputmode="numeric"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>
+                رقم الهاتف
+                <span>Mobile Number</span>
+              </label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <input
+                  type="tel"
+                  id="phone"
+                  placeholder="3XXXXXXX"
+                  inputmode="numeric"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-lookup" id="btn-lookup">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              عرض المواعيد
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Results Page ── -->
+    <div class="page" id="page-results">
+      <div class="results-wrapper">
+        <div class="results-header">
+          <div>
+            <h2>سجلاتك الطبية</h2>
+            <p>Your Medical Records — Al-Sayyida Hejama Center</p>
+          </div>
+          <button class="btn-back" id="btn-back">
+            <i class="fa-solid fa-arrow-right"></i>
+            رجوع
+          </button>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="section-label">
+          <i class="fa-solid fa-calendar-check"></i>
+          المواعيد القادمة — Upcoming Appointments
+        </div>
+        <div id="upcoming-list"></div>
+
+        <!-- Past sessions -->
+        <div class="section-label">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          جلسات الحجامة السابقة — Past Sessions
+        </div>
+        <div id="sessions-list"></div>
+      </div>
+    </div>
+
+    <script>
+      function showPage(id) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        window.scrollTo(0, 0);
+      }
+
+      document.getElementById("btn-back").addEventListener("click", () => {
+        showPage("page-lookup");
+      });
+
+      document
+        .getElementById("lookup-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btn-lookup");
+          const errEl = document.getElementById("lookup-error");
+          errEl.style.display = "none";
+
+          const national_id = document
+            .getElementById("national-id")
+            .value.trim();
+          const phone = document.getElementById("phone").value.trim();
+
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> جاري البحث...';
+
+          try {
+            const res = await fetch("api.php?action=guest_lookup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ national_id, phone }),
+            });
+            const data = await res.json();
+
+            if (!data.found) {
+              document.getElementById("error-text").textContent =
+                data.error ||
+                "لم يتم العثور على سجلاتك. تأكدي من الرقم الوطني ورقم الهاتف.";
+              errEl.style.display = "block";
+            } else {
+              renderResults(data);
+              showPage("page-results");
+            }
+          } catch {
+            document.getElementById("error-text").textContent =
+              "خطأ في الاتصال. حاولي مرة أخرى.";
+            errEl.style.display = "block";
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="fa-solid fa-magnifying-glass"></i> عرض المواعيد';
+          }
+        });
+
+      function renderResults(data) {
+        renderUpcoming(data.upcoming || []);
+        renderSessions(data.sessions || []);
+      }
+
+      function renderUpcoming(list) {
+        const el = document.getElementById("upcoming-list");
+        if (!list.length) {
+          el.innerHTML =
+            '<div class="empty-state"><i class="fa-regular fa-calendar"></i>لا توجد مواعيد قادمة حالياً</div>';
+          return;
+        }
+        el.innerHTML = list
+          .map((a) => {
+            const d = new Date(a.appointment_date);
+            const dateStr = d.toLocaleDateString("ar-BH", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+            const timeStr = d.toLocaleTimeString("ar-BH", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            const chipClass =
+              a.status === "Waiting" ? "chip-waiting" : "chip-scheduled";
+            const chipLabel = a.status === "Waiting" ? "في الانتظار" : "مؤكد";
+            return `
+            <div class="appt-card">
+              <div>
+                <div class="appt-date">${dateStr}</div>
+                <div class="appt-time">${timeStr}</div>
+                ${a.specialist_name ? `<div class="appt-specialist"><i class="fa-solid fa-user-doctor"></i> ${a.specialist_name}</div>` : ""}
+              </div>
+              <span class="status-chip ${chipClass}">${chipLabel}</span>
+            </div>`;
+          })
+          .join("");
+      }
+
+      function renderSessions(list) {
+        const el = document.getElementById("sessions-list");
+        if (!list.length) {
+          el.innerHTML =
+            '<div class="empty-state"><i class="fa-solid fa-scroll"></i>لا توجد جلسات سابقة</div>';
+          return;
+        }
+        el.innerHTML = list
+          .map((s) => {
+            const d = new Date(s.completed_at);
+            const dateStr = d.toLocaleDateString("ar-BH", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+            const types = (s.cupping_types || "")
+              .split(",")
+              .filter(Boolean)
+              .map((t) => `<span class="chip">${t.trim()}</span>`)
+              .join("");
+
+            const noteHtml = s.patient_notes
+              ? `<div class="patient-note"><strong>ملاحظات المختصة للمريضة</strong>${escHtml(s.patient_notes)}</div>`
+              : "";
+
+            const bodyMapHtml = buildBodyMap(s.cup_positions || [], s.id);
+
+            return `
+            <div class="session-card">
+              <div class="session-meta">
+                <div>
+                  <div class="session-date">${dateStr}</div>
+                  ${s.specialist_name ? `<div class="session-spec"><i class="fa-solid fa-user-doctor"></i> ${escHtml(s.specialist_name)}</div>` : ""}
+                </div>
+                <div class="session-chips">
+                  ${types}
+                  ${s.cup_count ? `<span class="chip"><i class="fa-solid fa-circle"></i> ${s.cup_count} كأس</span>` : ""}
+                </div>
+              </div>
+              ${noteHtml}
+              ${bodyMapHtml}
+            </div>`;
+          })
+          .join("");
+      }
+
+      function buildBodyMap(positions, sessionId) {
+        if (!positions || !positions.length) return "";
+        const frontPts = positions.filter((p) => p.view === "front");
+        const backPts = positions.filter((p) => p.view === "back");
+        if (!frontPts.length && !backPts.length) return "";
+
+        function mapSvg(pts, view) {
+          const label = view === "front" ? "الأمام" : "الخلف";
+          const dots = pts
+            .map(
+              (p) =>
+                `<div class="cup-dot ${p.type === "dry" ? "dry" : ""}" style="left:${p.x_pct}%;top:${p.y_pct}%">${p.num}</div>`,
+            )
+            .join("");
+          return `
+          <div class="map-container">
+            <div class="map-label">${label}</div>
+            <div class="map-svg-wrap" id="map-${view}-${sessionId}">
+              ${bodySvg()}
+              ${dots}
+            </div>
+          </div>`;
+        }
+
+        const mapsHtml =
+          (frontPts.length ? mapSvg(frontPts, "front") : "") +
+          (backPts.length ? mapSvg(backPts, "back") : "");
+
+        return `
+        <div class="body-map-section">
+          <div class="body-map-title"><i class="fa-solid fa-person-dots-from-line"></i> مواضع الحجامة</div>
+          <div class="maps-row">${mapsHtml}</div>
+          <div style="display:flex;gap:12px;justify-content:center;margin-top:8px;font-size:0.75rem;">
+            <span><i class="fa-solid fa-circle" style="color:var(--primary)"></i> رطبة (Wet)</span>
+            <span><i class="fa-solid fa-circle" style="color:#aaa"></i> جافة (Dry)</span>
+          </div>
+        </div>`;
+      }
+
+      function bodySvg() {
+        return `<svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- Head -->
+          <ellipse cx="50" cy="18" rx="13" ry="16" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Neck -->
+          <rect x="44" y="32" width="12" height="10" rx="3" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Torso -->
+          <path d="M28,42 Q22,50 22,65 L22,115 Q28,120 50,120 Q72,120 78,115 L78,65 Q78,50 72,42 Q64,38 50,38 Q36,38 28,42Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Left arm -->
+          <path d="M28,42 Q16,50 14,70 Q12,85 16,100 Q18,105 22,105 L24,88 Q22,72 28,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Right arm -->
+          <path d="M72,42 Q84,50 86,70 Q88,85 84,100 Q82,105 78,105 L76,88 Q78,72 72,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Left leg -->
+          <path d="M36,120 Q30,135 30,160 Q30,185 34,200 Q38,205 42,205 Q46,205 46,200 L46,160 Q46,140 44,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+          <!-- Right leg -->
+          <path d="M64,120 Q70,135 70,160 Q70,185 66,200 Q62,205 58,205 Q54,205 54,200 L54,160 Q54,140 56,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        </svg>`;
+      }
+
+      function escHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+    </script>
+  </body>
+</html>

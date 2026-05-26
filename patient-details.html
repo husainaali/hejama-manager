@@ -1,221 +1,586 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Sayyida | Patient Details</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Al-Sayyida | Patient Profile</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      .details-grid {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+      .profile-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 1.5rem;
+        height: fit-content;
+      }
+      .avatar-circle {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0 auto 1rem;
+        border: 3px solid white;
+        box-shadow: var(--shadow-sm);
+      }
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f5f5f5;
+        text-align: left;
+        gap: 0.5rem;
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+      .info-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-main);
+        text-align: right;
+      }
+      .med-flags {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .med-flag {
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: #ffebee;
+        color: #c62828;
+      }
+      .med-flag.ok {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        padding-left: 2.5rem;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #eee;
+      }
+      .timeline-item {
+        position: relative;
+        padding-bottom: 2rem;
+      }
+      .timeline-dot {
+        position: absolute;
+        left: -35px;
+        top: 6px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px var(--primary-light);
+      }
+      .timeline-dot.dim {
+        background: #ccc;
+        box-shadow: 0 0 0 2px #eee;
+      }
+      .timeline-card {
+        background: white;
+        border-radius: var(--radius-md);
+        padding: 1.3rem 1.5rem;
+        box-shadow: var(--shadow-sm);
+        border-left: 4px solid var(--primary);
+      }
+      .timeline-card.dim {
+        border-left-color: #ddd;
+      }
+      .tc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.8rem;
+      }
+      .tc-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 3px;
+      }
+      .tc-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      .tc-spec {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      .tc-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        color: #555;
+        margin-bottom: 0.8rem;
+      }
+      .tc-stats span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .tc-notes {
+        background: #fdfaf7;
+        border: 1px solid var(--primary-light);
+        border-radius: var(--radius-sm);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.83rem;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 0.8rem;
+      }
+      .tc-notes strong {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--primary-dark);
+        margin-bottom: 3px;
+      }
+
+      /* Mini body map in timeline */
+      .mini-maps {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+      .mini-map-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .mini-map-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+      }
+      .mini-map-wrap {
+        position: relative;
+        width: 90px;
+        height: 170px;
+        background: #fdfaf7;
+        border-radius: var(--radius-sm);
+        border: 1px solid #eee;
+        overflow: hidden;
+      }
+      .mini-map-wrap svg {
+        width: 100%;
+        height: 100%;
+      }
+      .mini-dot {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7px;
+        font-weight: 800;
+        color: white;
+        border: 1.5px solid rgba(0, 0, 0, 0.2);
+      }
+      .mini-dot.wet {
+        background: rgba(196, 154, 108, 0.85);
+      }
+      .mini-dot.dry {
+        background: rgba(150, 150, 150, 0.85);
+      }
+      .mini-dot.sliding {
+        background: rgba(126, 87, 194, 0.85);
+      }
+
+      @media (max-width: 900px) {
         .details-grid {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
+          grid-template-columns: 1fr;
         }
-
         .profile-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2.5rem;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
+          position: static;
         }
-
-        .avatar-circle {
-            width: 100px;
-            height: 100px;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0 auto 1.5rem;
-            border: 4px solid #fff;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .info-group {
-            text-align: left;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .info-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .info-value {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #eee;
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 2rem;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -35px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid #fff;
-            box-shadow: 0 0 0 2px var(--primary-light);
-        }
-
-        .timeline-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--primary);
-        }
-
-        .timeline-date {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            display: block;
-        }
+      }
     </style>
-</head>
-<body>
-    <button class="menu-toggle">
-        <i class="fa-solid fa-bars"></i>
-    </button>
+  </head>
+  <body>
+    <button class="menu-toggle"><i class="fa-solid fa-bars"></i></button>
 
     <aside class="sidebar">
-        <div class="logo-area">
-            <div class="logo-text">AL-SAYYIDA</div>
-        </div>
-        <ul class="nav-links">
-            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a href="appointments.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i><span>Appointments</span></a></li>
-            <li class="nav-item"><a href="patients.html" class="nav-link active"><i class="fa-solid fa-users"></i><span>Patients</span></a></li>
-            <li class="nav-item"><a href="specialist.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i><span>Specialist Team</span></a></li>
-            <li class="nav-item"><a href="reminders.html" class="nav-link"><i class="fa-solid fa-bell"></i><span>Automations</span></a></li>
-        </ul>
+      <div class="logo-area">
+        <div class="logo-text">AL-SAYYIDA</div>
+      </div>
+      <ul class="nav-links" id="nav-links"></ul>
+      <div
+        class="sidebar-footer"
+        style="
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        "
+      >
+        <a href="logout.php" class="nav-link" style="color: #ff8080">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
     </aside>
 
-
     <main class="main-content">
-        <header class="header">
-            <div class="welcome-msg">
-                <a href="patients.html" style="text-decoration: none; color: var(--primary-dark); font-weight: 600; font-size: 0.9rem;">
-                    <i class="fa-solid fa-arrow-left"></i> Back to Directory
-                </a>
-                <h1 style="margin-top: 0.5rem;">Patient Profile</h1>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-primary" onclick="window.location.href='specialist.html'">
-                    <i class="fa-solid fa-stethoscope"></i> Start New Session
-                </button>
-            </div>
-        </header>
-
-        <div class="details-grid">
-            <!-- Left: Profile Info -->
-            <section class="profile-card">
-                <div class="avatar-circle">MY</div>
-                <h2>Mariam Yousif</h2>
-                <span class="status-badge status-confirmed">Active Patient</span>
-
-                <div class="info-group">
-                    <div class="info-label">CPR / National ID</div>
-                    <div class="info-value">920812345</div>
-
-                    <div class="info-label">Phone Number</div>
-                    <div class="info-value">33455773</div>
-
-                    <div class="info-label">Date of Birth</div>
-                    <div class="info-value">12 Aug 1992 (33 Years)</div>
-
-                    <div class="info-label">Medical Alerts</div>
-                    <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px;">
-                        <span class="status-badge" style="background: #ffebee; color: #c62828;">Diabetes</span>
-                        <span class="status-badge" style="background: #fff3e0; color: #ef6c00;">Low BP</span>
-                    </div>
-                </div>
-
-                <div class="form-actions" style="margin-top: 2rem;">
-                    <button class="btn" style="width: 100%; justify-content: center; background: #f5f5f5;">
-                        <i class="fa-solid fa-pen"></i> Edit Profile
-                    </button>
-                </div>
-            </section>
-
-            <!-- Right: Treatment History -->
-            <section>
-                <h3 class="section-title">Treatment History</h3>
-                
-                <div class="timeline">
-                    <!-- Session 1 -->
-                    <div class="timeline-item">
-                        <span class="timeline-date">Today, 09:30 AM</span>
-                        <div class="timeline-card">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div>
-                                    <h4 style="margin-bottom: 5px;">Wet Hejama Session</h4>
-                                    <p style="font-size: 0.85rem; color: var(--text-muted);">Specialist: Dr. Sara</p>
-                                </div>
-                                <span class="status-badge status-confirmed">Completed</span>
-                            </div>
-                            <div style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
-                                <div><strong>Cups:</strong> 7 Cups</div>
-                                <div><strong>Blood:</strong> Thick / Dark Red</div>
-                                <div style="grid-column: span 2;"><strong>Sites:</strong> Back (C7, T1, T2), Shoulders</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Session 2 -->
-                    <div class="timeline-item">
-                        <span class="timeline-date">15 April 2026</span>
-                        <div class="timeline-card" style="border-left-color: #ccc;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div>
-                                    <h4 style="margin-bottom: 5px;">Initial Consultation</h4>
-                                    <p style="font-size: 0.85rem; color: var(--text-muted);">Specialist: Dr. Laila</p>
-                                </div>
-                                <span class="status-badge" style="background: #f5f5f5;">Consultation</span>
-                            </div>
-                            <p style="margin-top: 0.8rem; font-size: 0.85rem;">Patient reported chronic neck pain and migraines. Recommended wet cupping for the next session.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <header class="header">
+        <div class="welcome-msg">
+          <a
+            href="patients.html"
+            style="
+              text-decoration: none;
+              color: var(--primary-dark);
+              font-weight: 600;
+              font-size: 0.85rem;
+            "
+          >
+            <i class="fa-solid fa-arrow-left"></i> Back to Directory
+          </a>
+          <h1 style="margin-top: 0.4rem" id="page-title">Patient Profile</h1>
         </div>
+        <div class="header-actions" id="header-actions"></div>
+      </header>
+
+      <div class="details-grid">
+        <!-- Profile card -->
+        <section class="profile-card" id="profile-card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 200px;
+              color: var(--text-muted);
+            "
+          >
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+          </div>
+        </section>
+
+        <!-- Treatment timeline -->
+        <section>
+          <h3
+            class="section-title"
+            style="
+              font-size: 1.1rem;
+              font-weight: 700;
+              color: var(--secondary);
+              margin-bottom: 1.5rem;
+              padding-bottom: 0.5rem;
+              border-bottom: 2px solid var(--primary-light);
+            "
+          >
+            Treatment History
+          </h3>
+          <div class="timeline" id="timeline">
+            <div
+              style="
+                color: var(--text-muted);
+                font-size: 0.9rem;
+                padding: 1rem 0;
+              "
+            >
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading history...
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
-</body>
+    <script src="app.js"></script>
+    <script>
+      const patientId = parseInt(
+        new URLSearchParams(location.search).get("id") || "0",
+      );
+      let currentUser = null;
+
+      const bodySvgMarkup = `<svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="18" rx="13" ry="16" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <rect x="44" y="32" width="12" height="10" rx="3" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <path d="M28,42 Q22,50 22,65 L22,115 Q28,120 50,120 Q72,120 78,115 L78,65 Q78,50 72,42 Q64,38 50,38 Q36,38 28,42Z" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <path d="M28,42 Q16,50 14,70 Q12,85 16,100 Q18,105 22,105 L24,88 Q22,72 28,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <path d="M72,42 Q84,50 86,70 Q88,85 84,100 Q82,105 78,105 L76,88 Q78,72 72,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <path d="M36,120 Q30,135 30,160 Q30,185 34,200 Q38,205 42,205 Q46,205 46,200 L46,160 Q46,140 44,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+        <path d="M64,120 Q70,135 70,160 Q70,185 66,200 Q62,205 58,205 Q54,205 54,200 L54,160 Q54,140 56,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="0.8"/>
+      </svg>`;
+
+      async function loadPatient() {
+        if (!patientId) {
+          document.getElementById("profile-card").innerHTML =
+            '<p style="color:var(--error);padding:1rem">No patient ID specified.</p>';
+          return;
+        }
+        const res = await fetch(`api.php?action=get_patient&id=${patientId}`);
+        const p = await res.json();
+        renderProfile(p);
+        renderHeaderActions(p);
+      }
+
+      function renderProfile(p) {
+        const initials = (p.full_name || "?")
+          .split(" ")
+          .slice(0, 2)
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase();
+        const mh = p.medical_history;
+
+        const flags = [];
+        if (mh) {
+          if (mh.blood_pressure) flags.push("BP");
+          if (mh.diabetes) flags.push("Diabetes");
+          if (mh.heart_disease) flags.push("Heart");
+          if (mh.leukemia) flags.push("Leukemia");
+          if (mh.pregnant) flags.push("Pregnant");
+          if (mh.blood_thinners) flags.push("Thinners");
+        }
+
+        const dob = p.dob ? new Date(p.dob) : null;
+        const age = dob
+          ? Math.floor((Date.now() - dob) / (365.25 * 24 * 3600 * 1000))
+          : null;
+
+        document.getElementById("page-title").textContent = p.full_name;
+        document.getElementById("profile-card").innerHTML = `
+          <div class="avatar-circle">${initials}</div>
+          <h2 style="font-size:1.2rem;margin-bottom:0.3rem">${p.full_name}</h2>
+          <span class="status-badge status-confirmed" style="margin-bottom:1.5rem;display:inline-block">Active Patient</span>
+
+          <div style="margin-top:1rem">
+            <div class="info-row">
+              <span class="info-label">CPR / ID</span>
+              <span class="info-value" style="font-family:monospace">${p.cpr || "—"}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Phone</span>
+              <span class="info-value">${p.phone || "—"}</span>
+            </div>
+            ${
+              dob
+                ? `<div class="info-row">
+              <span class="info-label">Date of Birth</span>
+              <span class="info-value">${dob.toLocaleDateString("en-BH", { day: "numeric", month: "short", year: "numeric" })}${age ? ` (${age} yrs)` : ""}</span>
+            </div>`
+                : ""
+            }
+            ${
+              p.file_no
+                ? `<div class="info-row">
+              <span class="info-label">File No.</span>
+              <span class="info-value">#${p.file_no}</span>
+            </div>`
+                : ""
+            }
+            <div class="info-row">
+              <span class="info-label">Medical Alerts</span>
+              <div class="med-flags">
+                ${flags.length ? flags.map((f) => `<span class="med-flag">${f}</span>`).join("") : '<span class="med-flag ok">None</span>'}
+              </div>
+            </div>
+            ${
+              mh && mh.allergies
+                ? `<div class="info-row">
+              <span class="info-label">Allergies</span>
+              <span class="info-value" style="font-size:0.82rem">${mh.allergies}</span>
+            </div>`
+                : ""
+            }
+          </div>
+
+          ${
+            currentUser &&
+            ["super_admin", "reception"].includes(currentUser.role)
+              ? `
+          <div style="margin-top:1.5rem">
+            <a href="intake.html?edit=${patientId}" class="btn" style="width:100%;justify-content:center;background:#f5f5f5;text-decoration:none;display:flex;padding:0.6rem">
+              <i class="fa-solid fa-pen"></i>&nbsp; Edit Profile
+            </a>
+          </div>`
+              : ""
+          }
+        `;
+      }
+
+      function renderHeaderActions(p) {
+        if (!currentUser) return;
+        const el = document.getElementById("header-actions");
+        if (
+          ["super_admin", "reception", "specialist"].includes(currentUser.role)
+        ) {
+          el.innerHTML = `
+            <button class="btn btn-primary" onclick="bookAppointment()">
+              <i class="fa-solid fa-calendar-plus"></i> Book Appointment
+            </button>`;
+        }
+      }
+
+      function bookAppointment() {
+        window.location.href = `appointments.html?patient_id=${patientId}`;
+      }
+
+      async function loadSessions() {
+        if (!patientId) return;
+        const res = await fetch(
+          `api.php?action=get_patient_sessions&patient_id=${patientId}`,
+        );
+        const sessions = await res.json();
+        renderTimeline(sessions);
+      }
+
+      function renderTimeline(sessions) {
+        const el = document.getElementById("timeline");
+        if (!sessions.length) {
+          el.innerHTML =
+            '<p style="color:var(--text-muted);font-size:0.9rem;padding:1rem 0"><i class="fa-regular fa-clock"></i> No treatment sessions recorded yet.</p>';
+          return;
+        }
+
+        el.innerHTML = sessions
+          .map((s, i) => {
+            const d = new Date(s.completed_at);
+            const dateStr = d.toLocaleDateString("en-BH", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            });
+            const timeStr = d.toLocaleTimeString("en-BH", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            const types = (s.cupping_types || "")
+              .split(",")
+              .filter(Boolean)
+              .map((t) => t.trim())
+              .join(" · ");
+
+            const miniMaps = buildMiniMaps(s.cup_positions || [], s.id);
+
+            const notesHtml = s.specialist_notes
+              ? `<div class="tc-notes"><strong>Specialist Notes</strong>${escHtml(s.specialist_notes)}</div>`
+              : "";
+
+            return `
+            <div class="timeline-item">
+              <div class="timeline-dot${i > 0 ? " dim" : ""}"></div>
+              <div class="timeline-card${i > 0 ? " dim" : ""}">
+                <div class="tc-header">
+                  <div>
+                    <div class="tc-date">${dateStr} · ${timeStr}</div>
+                    <div class="tc-title">${types || "Hejama Session"}</div>
+                    <div class="tc-spec"><i class="fa-solid fa-user-doctor" style="font-size:0.75rem"></i> ${escHtml(s.specialist_name || "—")}</div>
+                  </div>
+                  <span class="status-badge status-confirmed">Completed</span>
+                </div>
+                <div class="tc-stats">
+                  <span><i class="fa-solid fa-circle" style="color:var(--primary)"></i> ${s.cup_count || 0} cups</span>
+                  ${s.blood_density && s.blood_density !== "Normal" ? `<span><i class="fa-solid fa-droplet"></i> ${s.blood_density}</span>` : ""}
+                  ${s.blood_color ? `<span><i class="fa-solid fa-palette"></i> ${s.blood_color}</span>` : ""}
+                </div>
+                ${notesHtml}
+                ${miniMaps}
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
+      function buildMiniMaps(positions, sessionId) {
+        if (!positions || !positions.length) return "";
+        const frontPts = positions.filter((p) => p.view === "front");
+        const backPts = positions.filter((p) => p.view === "back");
+        if (!frontPts.length && !backPts.length) return "";
+
+        function miniMap(pts, view) {
+          const label = view === "front" ? "Front" : "Back";
+          const dots = pts
+            .map(
+              (p) =>
+                `<div class="mini-dot ${p.type || "wet"}" style="left:${p.x_pct}%;top:${p.y_pct}%">${p.num}</div>`,
+            )
+            .join("");
+          return `<div class="mini-map-col">
+            <div class="mini-map-label">${label}</div>
+            <div class="mini-map-wrap">${bodySvgMarkup}${dots}</div>
+          </div>`;
+        }
+
+        return `<div class="mini-maps">
+          ${frontPts.length ? miniMap(frontPts, "front") : ""}
+          ${backPts.length ? miniMap(backPts, "back") : ""}
+          <div style="font-size:0.72rem;color:var(--text-muted);align-self:flex-end;padding-bottom:4px">
+            <span style="color:var(--primary)">●</span> Wet &nbsp;
+            <span style="color:#aaa">●</span> Dry &nbsp;
+            <span style="color:#7e57c2">●</span> Sliding
+          </div>
+        </div>`;
+      }
+
+      function escHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      window.onAuthReady = function (user) {
+        currentUser = user;
+        loadPatient();
+        loadSessions();
+      };
+    </script>
+  </body>
 </html>

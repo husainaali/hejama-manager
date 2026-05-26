@@ -1,238 +1,736 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Sayyida | Specialist Treatment Room</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Al-Sayyida | Treatment Session</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        .treatment-container {
-            display: grid;
-            grid-template-columns: 350px 1fr 350px;
-            gap: 1.5rem;
-            padding: 1.5rem;
-        }
+      body {
+        display: block;
+      }
+      .session-layout {
+        display: grid;
+        grid-template-columns: 300px 1fr 320px;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        min-height: calc(100vh - 72px);
+      }
 
-        /* Body Map Styles */
-        .map-section {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            box-shadow: var(--shadow-sm);
-        }
+      /* ── Patient sidebar ── */
+      .patient-panel {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        overflow-y: auto;
+      }
+      .patient-panel .panel-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+      }
+      .alert-card {
+        border-radius: var(--radius-sm);
+        padding: 0.9rem 1rem;
+        margin-bottom: 0.8rem;
+        border-left: 4px solid var(--primary);
+        background: #fdfaf7;
+      }
+      .alert-card.danger {
+        border-left-color: var(--error);
+        background: #fff5f5;
+      }
+      .alert-card.warning {
+        border-left-color: var(--warning);
+        background: #fffde7;
+      }
+      .alert-card h4 {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+      }
+      .alert-card p {
+        font-size: 0.8rem;
+        color: #555;
+        line-height: 1.5;
+      }
+      .med-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: #ffebee;
+        color: #c62828;
+        margin: 2px;
+      }
 
-        .body-maps {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 1rem;
-        }
+      /* ── Body map ── */
+      .map-panel {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .map-panel .panel-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: 0.3rem;
+        align-self: flex-start;
+      }
+      .map-hint {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        align-self: flex-start;
+      }
+      .type-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 1rem;
+        align-self: flex-start;
+        flex-wrap: wrap;
+      }
+      .type-btn {
+        padding: 5px 14px;
+        border-radius: 20px;
+        border: 2px solid #eee;
+        background: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: "Inter", sans-serif;
+      }
+      .type-btn.active-wet {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .type-btn.active-dry {
+        border-color: #bbb;
+        background: #f5f5f5;
+        color: #555;
+      }
+      .type-btn.active-sliding {
+        border-color: #7e57c2;
+        background: #ede7f6;
+        color: #4527a0;
+      }
+      .maps-container {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .map-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .map-col-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+      }
+      .map-wrap {
+        position: relative;
+        width: 200px;
+        height: 380px;
+        background: #fdfaf7;
+        border-radius: var(--radius-md);
+        border: 1px solid #eee;
+        cursor: crosshair;
+        overflow: hidden;
+      }
+      .map-wrap svg {
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .cup-mark {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 800;
+        color: white;
+        cursor: pointer;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        transition: transform 0.1s;
+      }
+      .cup-mark:hover {
+        transform: translate(-50%, -50%) scale(1.3);
+      }
+      .cup-mark.wet {
+        background: rgba(196, 154, 108, 0.85);
+        border-color: var(--primary-dark);
+      }
+      .cup-mark.dry {
+        background: rgba(150, 150, 150, 0.85);
+        border-color: #666;
+      }
+      .cup-mark.sliding {
+        background: rgba(126, 87, 194, 0.85);
+        border-color: #4527a0;
+      }
+      .map-legend {
+        display: flex;
+        gap: 12px;
+        font-size: 0.75rem;
+        margin-top: 0.8rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .map-legend span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .legend-dot.wet {
+        background: var(--primary);
+      }
+      .legend-dot.dry {
+        background: #aaa;
+      }
+      .legend-dot.sliding {
+        background: #7e57c2;
+      }
+      .btn-clear-map {
+        padding: 5px 12px;
+        font-size: 0.78rem;
+        background: #ffebee;
+        color: #c62828;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        margin-top: 0.5rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+      }
 
-        .map-wrapper {
-            position: relative;
-            width: 250px;
-            height: 500px;
-            background: #fdfaf7;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #eee;
-        }
+      /* ── Log panel ── */
+      .log-panel {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        overflow-y: auto;
+      }
+      .log-panel .panel-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+      }
+      .obs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+      }
 
-        .body-svg {
-            width: 100%;
-            height: 100%;
-            cursor: crosshair;
+      @media (max-width: 1100px) {
+        .session-layout {
+          grid-template-columns: 1fr;
         }
-
-        .cup-mark {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(184, 134, 11, 0.6);
-            border: 2px solid #8B4513;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: white;
-            font-weight: bold;
-            pointer-events: auto;
+        .maps-container {
+          gap: 1rem;
         }
-
-        .history-card {
-            background: #fff;
-            border-radius: var(--radius-md);
-            padding: 1.2rem;
-            border-left: 4px solid var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .log-section {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .log-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .btn-mark {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
+      }
     </style>
-</head>
-<body>
-    <button class="menu-toggle">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-
-
-    <header class="header" style="padding: 1rem 2rem; background: white; border-bottom: 1px solid #eee;">
-        <div class="welcome-msg">
-            <h1 style="font-size: 1.4rem;">Treatment Session: Mariam Yousif</h1>
-            <p>ID: #FILE-0092 | Specialist: Dr. Sara</p>
-        </div>
-        <div class="header-actions">
-            <button class="btn" onclick="window.location.href='index.html'">Exit Session</button>
-            <button class="btn btn-primary" id="save-session">Complete Session</button>
-        </div>
+  </head>
+  <body>
+    <!-- Session header -->
+    <header
+      class="header"
+      style="
+        padding: 1rem 2rem;
+        background: white;
+        border-bottom: 1px solid #eee;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      "
+    >
+      <div class="welcome-msg">
+        <h1 style="font-size: 1.3rem" id="session-title">Treatment Session</h1>
+        <p id="session-subtitle" style="color: var(--text-muted)">
+          Loading patient data...
+        </p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="btn-exit">
+          <i class="fa-solid fa-arrow-left"></i> Exit
+        </button>
+        <button class="btn btn-primary" id="btn-complete">
+          <i class="fa-solid fa-check-double"></i> Complete Session
+        </button>
+      </div>
     </header>
 
-    <div class="treatment-container">
-        <!-- Patient History Sidebar -->
-        <aside>
-            <h3 class="section-title">Medical Alert History</h3>
-            <div class="history-card" style="border-left-color: var(--error);">
-                <h4 style="color: var(--error);">Chronic Condition</h4>
-                <p style="font-size: 0.85rem;">Patient has <strong>Diabetes</strong> and <strong>Low Blood Pressure</strong>. Monitor dizziness.</p>
-            </div>
-            <div class="history-card">
-                <h4>Allergies</h4>
-                <p style="font-size: 0.85rem;">Sensitive to medical tape adhesives.</p>
-            </div>
-            <div class="history-card" style="border-left-color: var(--warning);">
-                <h4>Previous Notes</h4>
-                <p style="font-size: 0.85rem;">Last session: Heavy blood density on back sites (C7, T1).</p>
-            </div>
-        </aside>
+    <div class="session-layout">
+      <!-- ── Patient Info Panel ── -->
+      <aside class="patient-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-triangle-exclamation"></i> Medical Alerts
+        </div>
+        <div id="medical-alerts">
+          <p style="color: var(--text-muted); font-size: 0.85rem">Loading...</p>
+        </div>
+        <div class="panel-title" style="margin-top: 1.5rem">
+          <i class="fa-solid fa-clock-rotate-left"></i> Previous Sessions
+        </div>
+        <div id="prev-sessions">
+          <p style="color: var(--text-muted); font-size: 0.85rem">Loading...</p>
+        </div>
+      </aside>
 
-        <!-- Interactive Body Map -->
-        <section class="map-section">
-            <h3 class="section-title">Interactive Cupping Map</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Click on the diagrams to mark cupping sites.</p>
-            
-            <div class="body-maps">
-                <div class="map-wrapper" id="map-front">
-                    <p style="position: absolute; top: 10px; font-weight: bold;">FRONT</p>
-                    <svg class="body-svg" viewBox="0 0 100 200">
-                        <!-- Simplified Body Path -->
-                        <path d="M50,10 Q60,10 65,20 L65,40 Q65,60 80,60 L80,100 L70,180 L50,180 L30,180 L20,100 L20,60 Q35,60 35,40 L35,20 Q40,10 50,10" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
-                    </svg>
-                </div>
-                <div class="map-wrapper" id="map-back">
-                    <p style="position: absolute; top: 10px; font-weight: bold;">BACK</p>
-                    <svg class="body-svg" viewBox="0 0 100 200">
-                         <path d="M50,10 Q60,10 65,20 L65,40 Q65,60 80,60 L80,100 L70,180 L50,180 L30,180 L20,100 L20,60 Q35,60 35,40 L35,20 Q40,10 50,10" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
-                <span style="font-size: 0.8rem;"><i class="fa-solid fa-circle" style="color: var(--primary);"></i> Wet Hejama</span>
-                <span style="font-size: 0.8rem;"><i class="fa-solid fa-circle" style="color: #ccc;"></i> Dry Hejama</span>
-            </div>
-        </section>
+      <!-- ── Interactive Body Map ── -->
+      <section class="map-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-person-dots-from-line"></i> Interactive Cupping
+          Map
+        </div>
+        <p class="map-hint">
+          Click on the diagram to mark a cupping point. Click a mark to remove
+          it.
+        </p>
 
-        <!-- Treatment Log -->
-        <section class="log-section">
-            <h3 class="section-title">Session Observations</h3>
-            <div class="form-group">
-                <label>Type of Cupping</label>
-                <div class="checkbox-grid" style="grid-template-columns: 1fr; margin-bottom: 1rem;">
-                    <label class="checkbox-item"><input type="checkbox" checked> <span>Wet Hejama (رطبة)</span></label>
-                    <label class="checkbox-item"><input type="checkbox"> <span>Dry Hejama (جافة)</span></label>
-                    <label class="checkbox-item"><input type="checkbox"> <span>Sliding Hejama (متزحلقة)</span></label>
-                </div>
-            </div>
+        <div class="type-toggle">
+          <button class="type-btn active-wet" data-type="wet">
+            <i class="fa-solid fa-droplet"></i> Wet
+          </button>
+          <button class="type-btn" data-type="dry">
+            <i class="fa-regular fa-circle"></i> Dry
+          </button>
+          <button class="type-btn" data-type="sliding">
+            <i class="fa-solid fa-arrows-left-right"></i> Sliding
+          </button>
+        </div>
 
-            <div class="log-grid">
-                <div class="form-group">
-                    <label>Cup Count (عدد الكؤوس)</label>
-                    <input type="number" class="form-control" value="7">
-                </div>
-                <div class="form-group">
-                    <label>Blood Density (كثافة الدم)</label>
-                    <select class="form-control">
-                        <option>Normal (عادي)</option>
-                        <option>Thick (كثيف)</option>
-                        <option>Very Thick (كثيف جداً)</option>
-                    </select>
-                </div>
-            </div>
+        <div class="maps-container">
+          <div class="map-col">
+            <div class="map-col-label">Front</div>
+            <div class="map-wrap" id="map-front"></div>
+          </div>
+          <div class="map-col">
+            <div class="map-col-label">Back</div>
+            <div class="map-wrap" id="map-back"></div>
+          </div>
+        </div>
 
-            <div class="form-group" style="margin-top: 1rem;">
-                <label>Blood Color (لون الدم)</label>
-                <select class="form-control">
-                    <option>Bright Red (أحمر فاتح)</option>
-                    <option>Dark Red (أحمر غامق)</option>
-                    <option>Blackish (مائل للسواد)</option>
-                </select>
-            </div>
+        <div class="map-legend">
+          <span
+            ><div class="legend-dot wet"></div>
+            Wet Hejama</span
+          >
+          <span
+            ><div class="legend-dot dry"></div>
+            Dry Hejama</span
+          >
+          <span
+            ><div class="legend-dot sliding"></div>
+            Sliding</span
+          >
+        </div>
 
-            <div class="form-group" style="margin-top: 1rem;">
-                <label>Specialist Notes</label>
-                <textarea class="form-control" rows="5" placeholder="Add observations here..."></textarea>
-            </div>
-        </section>
+        <button class="btn-clear-map" id="btn-clear-map">
+          <i class="fa-solid fa-trash"></i> Clear All Marks
+        </button>
+      </section>
+
+      <!-- ── Session Log Panel ── -->
+      <section class="log-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-clipboard-list"></i> Session Observations
+        </div>
+
+        <div class="obs-grid">
+          <div class="form-group">
+            <label
+              style="
+                font-size: 0.82rem;
+                font-weight: 700;
+                margin-bottom: 5px;
+                display: block;
+              "
+              >Blood Density</label
+            >
+            <select
+              class="form-control"
+              id="blood-density"
+              style="font-size: 0.85rem; padding: 0.5rem"
+            >
+              <option>Normal</option>
+              <option>Thick</option>
+              <option>Very Thick</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label
+              style="
+                font-size: 0.82rem;
+                font-weight: 700;
+                margin-bottom: 5px;
+                display: block;
+              "
+              >Blood Color</label
+            >
+            <select
+              class="form-control"
+              id="blood-color"
+              style="font-size: 0.85rem; padding: 0.5rem"
+            >
+              <option>Bright Red</option>
+              <option>Dark Red</option>
+              <option>Blackish</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem">
+          <label
+            style="
+              font-size: 0.82rem;
+              font-weight: 700;
+              margin-bottom: 5px;
+              display: block;
+            "
+          >
+            Specialist Notes
+            <span style="font-weight: 400; color: var(--text-muted)"
+              >(internal — not shown to patient)</span
+            >
+          </label>
+          <textarea
+            class="form-control"
+            id="specialist-notes"
+            rows="4"
+            placeholder="Clinical observations, recommendations..."
+            style="font-size: 0.85rem; resize: vertical"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label
+            style="
+              font-size: 0.82rem;
+              font-weight: 700;
+              margin-bottom: 5px;
+              display: block;
+            "
+          >
+            Patient Notes
+            <span style="font-weight: 400; color: var(--text-muted)"
+              >(visible to patient in portal)</span
+            >
+          </label>
+          <textarea
+            class="form-control"
+            id="patient-notes"
+            rows="3"
+            placeholder="Post-session care instructions, follow-up advice..."
+            style="font-size: 0.85rem; resize: vertical"
+          ></textarea>
+        </div>
+
+        <div
+          style="
+            background: #fdfaf7;
+            border-radius: var(--radius-sm);
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+          "
+        >
+          <i class="fa-solid fa-circle-info"></i>
+          Cup count is calculated automatically from your map marks.
+        </div>
+      </section>
     </div>
 
+    <script src="app.js"></script>
     <script>
-        // Interactive Marker Logic
-        let cupCount = 0;
-        document.querySelectorAll('.map-wrapper').forEach(map => {
-            map.addEventListener('click', (e) => {
-                if (e.target.classList.contains('cup-mark')) {
-                    e.target.remove();
-                    return;
-                }
-                
-                const rect = map.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+      const params = new URLSearchParams(location.search);
+      const apptId = parseInt(params.get("appt_id") || "0");
+      const patientId = parseInt(params.get("patient_id") || "0");
 
-                const mark = document.createElement('div');
-                mark.className = 'cup-mark';
-                mark.style.left = `${x}px`;
-                mark.style.top = `${y}px`;
-                cupCount++;
-                mark.innerText = cupCount;
-                
-                map.appendChild(mark);
+      let cupPositions = [];
+      let cupCounter = 0;
+      let selectedType = "wet";
+
+      // ── Body map SVG ──
+      const bodySvgMarkup = `<svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="18" rx="13" ry="16" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <rect x="44" y="32" width="12" height="10" rx="3" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <path d="M28,42 Q22,50 22,65 L22,115 Q28,120 50,120 Q72,120 78,115 L78,65 Q78,50 72,42 Q64,38 50,38 Q36,38 28,42Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <path d="M28,42 Q16,50 14,70 Q12,85 16,100 Q18,105 22,105 L24,88 Q22,72 28,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <path d="M72,42 Q84,50 86,70 Q88,85 84,100 Q82,105 78,105 L76,88 Q78,72 72,60Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <path d="M36,120 Q30,135 30,160 Q30,185 34,200 Q38,205 42,205 Q46,205 46,200 L46,160 Q46,140 44,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+        <path d="M64,120 Q70,135 70,160 Q70,185 66,200 Q62,205 58,205 Q54,205 54,200 L54,160 Q54,140 56,120Z" fill="#fce4ec" stroke="#d81b60" stroke-width="1"/>
+      </svg>`;
+
+      document.getElementById("map-front").innerHTML = bodySvgMarkup;
+      document.getElementById("map-back").innerHTML = bodySvgMarkup;
+
+      // ── Type toggle buttons ──
+      document.querySelectorAll(".type-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".type-btn").forEach((b) => {
+            b.className = "type-btn";
+          });
+          selectedType = btn.dataset.type;
+          btn.classList.add(`active-${selectedType}`);
+        });
+      });
+
+      // ── Map click → place mark ──
+      ["map-front", "map-back"].forEach((mapId) => {
+        const mapEl = document.getElementById(mapId);
+        const view = mapId === "map-front" ? "front" : "back";
+
+        mapEl.addEventListener("click", (e) => {
+          if (e.target.classList.contains("cup-mark")) return;
+          const rect = mapEl.getBoundingClientRect();
+          const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+          const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+          cupCounter++;
+
+          const id = `cup-${Date.now()}`;
+          cupPositions.push({
+            id,
+            view,
+            x_pct: parseFloat(xPct.toFixed(2)),
+            y_pct: parseFloat(yPct.toFixed(2)),
+            type: selectedType,
+            num: cupCounter,
+          });
+
+          const mark = document.createElement("div");
+          mark.className = `cup-mark ${selectedType}`;
+          mark.dataset.id = id;
+          mark.style.left = `${xPct}%`;
+          mark.style.top = `${yPct}%`;
+          mark.textContent = cupCounter;
+          mark.addEventListener("click", removeMark);
+          mapEl.appendChild(mark);
+        });
+      });
+
+      function removeMark(e) {
+        e.stopPropagation();
+        const id = e.currentTarget.dataset.id;
+        cupPositions = cupPositions.filter((p) => p.id !== id);
+        e.currentTarget.remove();
+      }
+
+      document.getElementById("btn-clear-map").addEventListener("click", () => {
+        document.querySelectorAll(".cup-mark").forEach((m) => m.remove());
+        cupPositions = [];
+        cupCounter = 0;
+      });
+
+      // ── Load patient data ──
+      async function loadPatient() {
+        if (!patientId) return;
+        const res = await fetch(`api.php?action=get_patient&id=${patientId}`);
+        const p = await res.json();
+
+        document.getElementById("session-title").textContent =
+          `Treatment Session: ${p.full_name}`;
+        document.getElementById("session-subtitle").textContent =
+          `File: ${p.file_no || "—"} | CPR: ${p.cpr || "—"} | Phone: ${p.phone || "—"}`;
+
+        renderAlerts(p.medical_history);
+      }
+
+      function renderAlerts(mh) {
+        const el = document.getElementById("medical-alerts");
+        if (!mh) {
+          el.innerHTML =
+            '<p style="font-size:0.82rem;color:var(--text-muted)">No medical history on file.</p>';
+          return;
+        }
+        const conditions = [];
+        if (mh.blood_pressure) conditions.push("Blood Pressure");
+        if (mh.diabetes) conditions.push("Diabetes");
+        if (mh.heart_disease) conditions.push("Heart Disease");
+        if (mh.leukemia) conditions.push("Leukemia");
+
+        let html = "";
+        if (conditions.length) {
+          html += `<div class="alert-card danger">
+            <h4 style="color:var(--error)"><i class="fa-solid fa-triangle-exclamation"></i> Chronic Conditions</h4>
+            <p>${conditions.map((c) => `<span class="med-badge">${c}</span>`).join(" ")}</p>
+          </div>`;
+        }
+        if (mh.blood_thinners) {
+          html += `<div class="alert-card warning">
+            <h4><i class="fa-solid fa-pills"></i> Blood Thinners</h4>
+            <p>Patient takes blood-thinning medication.</p>
+          </div>`;
+        }
+        if (mh.pregnant) {
+          html += `<div class="alert-card danger">
+            <h4 style="color:var(--error)"><i class="fa-solid fa-baby"></i> Pregnant</h4>
+            <p>Consult senior specialist before proceeding.</p>
+          </div>`;
+        }
+        if (mh.allergies) {
+          html += `<div class="alert-card warning">
+            <h4><i class="fa-solid fa-ban"></i> Allergies</h4>
+            <p>${mh.allergies}</p>
+          </div>`;
+        }
+        if (mh.other_diseases) {
+          html += `<div class="alert-card">
+            <h4>Other Conditions</h4>
+            <p>${mh.other_diseases}</p>
+          </div>`;
+        }
+        if (!html) {
+          html =
+            '<p style="font-size:0.82rem;color:var(--success)"><i class="fa-solid fa-circle-check"></i> No major medical alerts.</p>';
+        }
+        el.innerHTML = html;
+      }
+
+      async function loadPrevSessions() {
+        if (!patientId) return;
+        const res = await fetch(
+          `api.php?action=get_patient_sessions&patient_id=${patientId}`,
+        );
+        const sessions = await res.json();
+        const el = document.getElementById("prev-sessions");
+        if (!sessions.length) {
+          el.innerHTML =
+            '<p style="font-size:0.82rem;color:var(--text-muted)">No previous sessions.</p>';
+          return;
+        }
+        el.innerHTML = sessions
+          .slice(0, 5)
+          .map((s) => {
+            const d = new Date(s.completed_at).toLocaleDateString("en-BH", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
             });
+            return `<div class="alert-card" style="padding:0.7rem">
+            <div style="font-size:0.8rem;font-weight:700">${d}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">${s.specialist_name || "—"} · ${s.cup_count || 0} cups</div>
+            ${s.specialist_notes ? `<p style="font-size:0.75rem;margin-top:4px;color:#555">${s.specialist_notes.slice(0, 80)}${s.specialist_notes.length > 80 ? "…" : ""}</p>` : ""}
+          </div>`;
+          })
+          .join("");
+      }
+
+      // ── Complete session ──
+      document
+        .getElementById("btn-complete")
+        .addEventListener("click", async () => {
+          if (!apptId) {
+            alert(
+              "No appointment ID found. Please open this session from the Appointments page.",
+            );
+            return;
+          }
+          if (!cupPositions.length) {
+            if (
+              !confirm(
+                "No cupping points marked on the body map. Save session anyway?",
+              )
+            )
+              return;
+          }
+
+          const cuppingTypes = [
+            ...new Set(cupPositions.map((p) => p.type)),
+          ].join(", ");
+
+          const payload = {
+            appointment_id: apptId,
+            cup_positions: cupPositions,
+            cupping_types: cuppingTypes,
+            cup_count: cupPositions.length,
+            blood_density: document.getElementById("blood-density").value,
+            blood_color: document.getElementById("blood-color").value,
+            specialist_notes: document.getElementById("specialist-notes").value,
+            patient_notes: document.getElementById("patient-notes").value,
+          };
+
+          const btn = document.getElementById("btn-complete");
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+          const res = await fetch("api.php?action=save_treatment_session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            window.location.href = patientId
+              ? `patient-details.html?id=${patientId}`
+              : "appointments.html";
+          } else {
+            alert("Error saving session: " + (data.error || "Unknown error"));
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="fa-solid fa-check-double"></i> Complete Session';
+          }
         });
 
-        document.getElementById('save-session').addEventListener('click', () => {
-            alert('Session Completed! Report generated and saved to patient file.');
-            window.location.href = 'index.html';
-        });
+      document.getElementById("btn-exit").addEventListener("click", () => {
+        if (
+          cupPositions.length ||
+          document.getElementById("specialist-notes").value
+        ) {
+          if (!confirm("Unsaved session data will be lost. Exit anyway?"))
+            return;
+        }
+        history.back();
+      });
+
+      window.onAuthReady = function () {
+        loadPatient();
+        loadPrevSessions();
+      };
     </script>
-</body>
+  </body>
 </html>

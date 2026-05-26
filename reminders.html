@@ -1,192 +1,252 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Al-Sayyida | Reminder Automation Settings</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        .automation-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-        }
+      .automation-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+      }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
 
-        input:checked + .slider {
-            background-color: var(--primary);
-        }
+      input:checked + .slider {
+        background-color: var(--primary);
+      }
 
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
 
-        .email-preview {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 2rem;
-            border-radius: var(--radius-md);
-            margin-top: 1rem;
-            font-family: 'Courier New', Courier, monospace;
-        }
+      .email-preview {
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        padding: 2rem;
+        border-radius: var(--radius-md);
+        margin-top: 1rem;
+        font-family: "Courier New", Courier, monospace;
+      }
 
-        .log-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
+      .log-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
 
-        .log-table th { text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
-        .log-table td { padding: 10px; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem; }
+      .log-table th {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 2px solid #eee;
+      }
+      .log-table td {
+        padding: 10px;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 0.9rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <button class="menu-toggle">
-        <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-bars"></i>
     </button>
 
-
     <aside class="sidebar">
-        <div class="logo-area">
-            <div class="logo-text">AL-SAYYIDA</div>
-        </div>
-        <ul class="nav-links">
-            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a href="appointments.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i><span>Appointments</span></a></li>
-            <li class="nav-item"><a href="patients.html" class="nav-link"><i class="fa-solid fa-users"></i><span>Patients</span></a></li>
-            <li class="nav-item"><a href="specialist.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i><span>Specialist Team</span></a></li>
-            <li class="nav-item"><a href="reminders.html" class="nav-link active"><i class="fa-solid fa-bell"></i><span>Automations</span></a></li>
-        </ul>
+      <div class="logo-area">
+        <div class="logo-text">AL-SAYYIDA</div>
+      </div>
+      <ul class="nav-links" id="nav-links"></ul>
+      <div
+        class="sidebar-footer"
+        style="
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        "
+      >
+        <a href="logout.php" class="nav-link" style="color: #ff8080">
+          <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </a>
+      </div>
     </aside>
 
     <main class="main-content">
-        <header class="header">
-            <div class="welcome-msg">
-                <h1>Reminder & Automation Settings</h1>
-                <p>Configure how the system notifies your team and patients.</p>
-            </div>
-        </header>
-
-        <section class="automation-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <div>
-                    <h3 style="margin-bottom: 5px;">Daily Admin Briefing Email</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Send a summary of today's appointments to reception and management every morning.</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Send Time (Daily)</label>
-                    <input type="time" class="form-control" value="08:00">
-                </div>
-                <div class="form-group">
-                    <label>Recipients (Comma separated)</label>
-                    <input type="text" class="form-control" value="reception@alsayyida.com, admin@alsayyida.com">
-                </div>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <h4>Email Content Preview:</h4>
-                <div class="email-preview">
-                    <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
-                        <strong>Subject:</strong> [Daily Summary] Al-Sayyida Appointments - May 08, 2026
-                    </div>
-                    <p>Hello Team,</p>
-                    <p>Here is the schedule for today's sessions:</p>
-                    <table style="width: 100%; margin: 15px 0;">
-                        <tr><td><strong>09:00 AM</strong></td><td>Mariam Yousif</td><td>Wet Hejama</td></tr>
-                        <tr><td><strong>10:30 AM</strong></td><td>Fatima Ahmed</td><td>Massage</td></tr>
-                        <tr><td><strong>01:00 PM</strong></td><td>Zainab Khalid</td><td>Dry Hejama</td></tr>
-                    </table>
-                    <p>Total Patients: 12 | Waiting: 0</p>
-                    <p>Regards,<br>Al-Sayyida System</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="automation-card">
-            <h3 class="section-title">Automation History Log</h3>
-            <table class="log-table">
-                <thead>
-                    <tr>
-                        <th>Date & Time</th>
-                        <th>Automation Task</th>
-                        <th>Target</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Today, 08:00 AM</td>
-                        <td>Daily Admin Briefing</td>
-                        <td>Reception Team</td>
-                        <td><span class="status-badge status-confirmed">Success</span></td>
-                    </tr>
-                    <tr>
-                        <td>Yesterday, 08:00 AM</td>
-                        <td>Daily Admin Briefing</td>
-                        <td>Reception Team</td>
-                        <td><span class="status-badge status-confirmed">Success</span></td>
-                    </tr>
-                    <tr>
-                        <td>Yesterday, 09:15 AM</td>
-                        <td>Low Stock Alert</td>
-                        <td>Purchasing Team</td>
-                        <td><span class="status-badge status-waiting">Sent</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <div class="form-actions" style="margin-top: 0;">
-             <button class="btn btn-primary" onclick="alert('Settings Saved Successfully!')">Save Configuration</button>
+      <header class="header">
+        <div class="welcome-msg">
+          <h1>Reminder & Automation Settings</h1>
+          <p>Configure how the system notifies your team and patients.</p>
         </div>
-    </main>
+      </header>
 
-</body>
+      <section class="automation-card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <div>
+            <h3 style="margin-bottom: 5px">Daily Admin Briefing Email</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem">
+              Send a summary of today's appointments to reception and management
+              every morning.
+            </p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Send Time (Daily)</label>
+            <input type="time" class="form-control" value="08:00" />
+          </div>
+          <div class="form-group">
+            <label>Recipients (Comma separated)</label>
+            <input
+              type="text"
+              class="form-control"
+              value="reception@alsayyida.com, admin@alsayyida.com"
+            />
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem">
+          <h4>Email Content Preview:</h4>
+          <div class="email-preview">
+            <div
+              style="
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+              "
+            >
+              <strong>Subject:</strong> [Daily Summary] Al-Sayyida Appointments
+              - May 08, 2026
+            </div>
+            <p>Hello Team,</p>
+            <p>Here is the schedule for today's sessions:</p>
+            <table style="width: 100%; margin: 15px 0">
+              <tr>
+                <td><strong>09:00 AM</strong></td>
+                <td>Mariam Yousif</td>
+                <td>Wet Hejama</td>
+              </tr>
+              <tr>
+                <td><strong>10:30 AM</strong></td>
+                <td>Fatima Ahmed</td>
+                <td>Massage</td>
+              </tr>
+              <tr>
+                <td><strong>01:00 PM</strong></td>
+                <td>Zainab Khalid</td>
+                <td>Dry Hejama</td>
+              </tr>
+            </table>
+            <p>Total Patients: 12 | Waiting: 0</p>
+            <p>Regards,<br />Al-Sayyida System</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="automation-card">
+        <h3 class="section-title">Automation History Log</h3>
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Automation Task</th>
+              <th>Target</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Today, 08:00 AM</td>
+              <td>Daily Admin Briefing</td>
+              <td>Reception Team</td>
+              <td>
+                <span class="status-badge status-confirmed">Success</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Yesterday, 08:00 AM</td>
+              <td>Daily Admin Briefing</td>
+              <td>Reception Team</td>
+              <td>
+                <span class="status-badge status-confirmed">Success</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Yesterday, 09:15 AM</td>
+              <td>Low Stock Alert</td>
+              <td>Purchasing Team</td>
+              <td><span class="status-badge status-waiting">Sent</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div class="form-actions" style="margin-top: 0">
+        <button
+          class="btn btn-primary"
+          onclick="alert('Settings Saved Successfully!')"
+        >
+          Save Configuration
+        </button>
+      </div>
+    </main>
+    <script src="app.js"></script>
+  </body>
 </html>

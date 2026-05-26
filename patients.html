@@ -1,216 +1,281 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Al-Sayyida | Patient Directory</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        .search-container {
-            background: white;
-            padding: 1.5rem;
-            border-radius: var(--radius-lg);
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+      .search-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
 
-        .search-box {
-            flex-grow: 1;
-            position: relative;
-        }
+      .search-box {
+        flex-grow: 1;
+        position: relative;
+      }
 
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
+      .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
 
-        .search-box input {
-            width: 100%;
-            padding: 0.8rem 1rem 0.8rem 2.5rem;
-            border: 1px solid #eee;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
+      .search-box input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 2.5rem;
+        border: 1px solid #eee;
+        border-radius: var(--radius-md);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
 
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-        }
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: var(--shadow-md);
+      }
 
-        .patient-table {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1rem;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-        }
+      .patient-table {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
 
-        .patient-row:hover {
-            background-color: #fdfaf7;
-            cursor: pointer;
-        }
+      .patient-row:hover {
+        background-color: #fdfaf7;
+        cursor: pointer;
+      }
 
-        .cpr-badge {
-            font-family: monospace;
-            background: #f0f0f0;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
+      .cpr-badge {
+        font-family: monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <button class="menu-toggle">
-        <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-bars"></i>
     </button>
 
-
     <aside class="sidebar">
-        <div class="logo-area">
-            <div class="logo-text">AL-SAYYIDA</div>
-        </div>
-        <ul class="nav-links">
-            <li class="nav-item"><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a href="appointments.html" class="nav-link"><i class="fa-solid fa-calendar-check"></i><span>Appointments</span></a></li>
-            <li class="nav-item"><a href="patients.html" class="nav-link active"><i class="fa-solid fa-users"></i><span>Patients</span></a></li>
-            <li class="nav-item"><a href="specialist.html" class="nav-link"><i class="fa-solid fa-notes-medical"></i><span>Specialist Team</span></a></li>
-            <li class="nav-item"><a href="reminders.html" class="nav-link"><i class="fa-solid fa-bell"></i><span>Automations</span></a></li>
-        </ul>
+      <div class="logo-area">
+        <div class="logo-text">AL-SAYYIDA</div>
+      </div>
+      <ul class="nav-links" id="nav-links"></ul>
+      <div
+        class="sidebar-footer"
+        style="
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        "
+      >
+        <a href="logout.php" class="nav-link" style="color: #ff8080">
+          <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </a>
+      </div>
     </aside>
 
     <main class="main-content">
-        <header class="header">
-            <div class="welcome-msg">
-                <h1>Patient Directory</h1>
-                <p>Manage and search your patient database.</p>
-            </div>
-            <button class="btn btn-primary" onclick="window.location.href='intake.html'">
-                <i class="fa-solid fa-plus"></i> New Patient
-            </button>
-        </header>
-
-        <section class="search-container">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="patient-search" placeholder="Search by Name, Phone, or CPR (National ID)...">
-            </div>
-            <select class="form-control" style="width: 200px;">
-                <option>All Locations</option>
-                <option>Salmabad</option>
-                <option>Manama</option>
-            </select>
-        </section>
-
-        <div class="patient-table">
-            <table class="appointment-list">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>CPR / National ID</th>
-                        <th>Phone Number</th>
-                        <th>Last Visit</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="patient-list-body">
-                    <tr class="patient-row">
-                        <td style="font-weight: 600;">Mariam Yousif</td>
-                        <td><span class="cpr-badge">920812345</span></td>
-                        <td>33455773</td>
-                        <td>Today</td>
-                        <td><span class="status-badge status-confirmed">Active</span></td>
-                        <td>
-                            <div style="display: flex; gap: 5px;">
-                                <button class="btn" style="padding: 5px 8px; font-size: 0.7rem;" onclick="window.location.href='patient-details.html'">Details</button>
-                                <button class="btn btn-primary" style="padding: 5px 8px; font-size: 0.7rem;">Book</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="patient-row">
-                        <td style="font-weight: 600;">Fatima Ahmed</td>
-                        <td><span class="cpr-badge">880567890</span></td>
-                        <td>39912345</td>
-                        <td>02 May 2026</td>
-                        <td><span class="status-badge status-confirmed">Active</span></td>
-                        <td>
-                            <div style="display: flex; gap: 5px;">
-                                <button class="btn" style="padding: 5px 8px; font-size: 0.7rem;" onclick="window.location.href='patient-details.html'">Details</button>
-                                <button class="btn btn-primary" style="padding: 5px 8px; font-size: 0.7rem;">Book</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="patient-row">
-                        <td style="font-weight: 600;">Zainab Khalid</td>
-                        <td><span class="cpr-badge">951011223</span></td>
-                        <td>36678899</td>
-                        <td>15 Apr 2026</td>
-                        <td><span class="status-badge status-waiting">Follow-up</span></td>
-                        <td>
-                            <div style="display: flex; gap: 5px;">
-                                <button class="btn" style="padding: 5px 8px; font-size: 0.7rem;" onclick="window.location.href='patient-details.html'">Details</button>
-                                <button class="btn btn-primary" style="padding: 5px 8px; font-size: 0.7rem;">Book</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+      <header class="header">
+        <div class="welcome-msg">
+          <h1>Patient Directory</h1>
+          <p>Manage and search your patient database.</p>
         </div>
+        <button
+          class="btn btn-primary"
+          onclick="window.location.href = 'intake.html'"
+        >
+          <i class="fa-solid fa-plus"></i> New Patient
+        </button>
+      </header>
+
+      <section class="search-container">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            id="patient-search"
+            placeholder="Search by Name, Phone, or CPR (National ID)..."
+          />
+        </div>
+        <select class="form-control" style="width: 200px">
+          <option>All Locations</option>
+          <option>Salmabad</option>
+          <option>Manama</option>
+        </select>
+      </section>
+
+      <div class="patient-table">
+        <table class="appointment-list">
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>CPR / National ID</th>
+              <th>Phone Number</th>
+              <th>Last Visit</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="patient-list-body">
+            <tr class="patient-row">
+              <td style="font-weight: 600">Mariam Yousif</td>
+              <td><span class="cpr-badge">920812345</span></td>
+              <td>33455773</td>
+              <td>Today</td>
+              <td><span class="status-badge status-confirmed">Active</span></td>
+              <td>
+                <div style="display: flex; gap: 5px">
+                  <button
+                    class="btn"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                    onclick="window.location.href = 'patient-details.html'"
+                  >
+                    Details
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                  >
+                    Book
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr class="patient-row">
+              <td style="font-weight: 600">Fatima Ahmed</td>
+              <td><span class="cpr-badge">880567890</span></td>
+              <td>39912345</td>
+              <td>02 May 2026</td>
+              <td><span class="status-badge status-confirmed">Active</span></td>
+              <td>
+                <div style="display: flex; gap: 5px">
+                  <button
+                    class="btn"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                    onclick="window.location.href = 'patient-details.html'"
+                  >
+                    Details
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                  >
+                    Book
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr class="patient-row">
+              <td style="font-weight: 600">Zainab Khalid</td>
+              <td><span class="cpr-badge">951011223</span></td>
+              <td>36678899</td>
+              <td>15 Apr 2026</td>
+              <td>
+                <span class="status-badge status-waiting">Follow-up</span>
+              </td>
+              <td>
+                <div style="display: flex; gap: 5px">
+                  <button
+                    class="btn"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                    onclick="window.location.href = 'patient-details.html'"
+                  >
+                    Details
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    style="padding: 5px 8px; font-size: 0.7rem"
+                  >
+                    Book
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </main>
 
+    <script src="app.js"></script>
     <script>
-        async function fetchPatients() {
-            try {
-                const response = await fetch('api.php?action=get_patients');
-                const patients = await response.json();
-                renderPatients(patients);
-            } catch (error) {
-                console.error('Error fetching patients:', error);
-            }
+      async function fetchPatients(q = "") {
+        const url =
+          "api.php?action=get_patients" +
+          (q ? "&q=" + encodeURIComponent(q) : "");
+        try {
+          const response = await fetch(url);
+          const patients = await response.json();
+          renderPatients(patients);
+        } catch (error) {
+          console.error("Error fetching patients:", error);
         }
+      }
 
-        function renderPatients(patients) {
-            const tableBody = document.getElementById('patient-list-body');
-            tableBody.innerHTML = patients.map(p => `
-                <tr class="patient-row" onclick="window.location.href='patient-details.html?id=${p.id}'">
-                    <td style="font-weight: 600;">${p.full_name}</td>
-                    <td><span class="cpr-badge">${p.cpr || 'N/A'}</span></td>
-                    <td>${p.phone || 'N/A'}</td>
-                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
-                    <td><span class="status-badge status-confirmed">Active</span></td>
-                    <td>
-                        <div style="display: flex; gap: 5px;">
-                            <button class="btn" style="padding: 5px 8px; font-size: 0.7rem;">Details</button>
-                            <button class="btn btn-primary" style="padding: 5px 8px; font-size: 0.7rem;">Book</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+      function renderPatients(patients) {
+        const tableBody = document.getElementById("patient-list-body");
+        if (!patients.length) {
+          tableBody.innerHTML =
+            '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#888">No patients found.</td></tr>';
+          return;
         }
+        tableBody.innerHTML = patients
+          .map(
+            (p) => `
+            <tr class="patient-row" onclick="window.location.href='patient-details.html?id=${p.id}'" style="cursor:pointer">
+                <td style="font-weight:600">${p.full_name}</td>
+                <td><span class="cpr-badge">${p.cpr || "—"}</span></td>
+                <td>${p.phone || "—"}</td>
+                <td>${new Date(p.created_at).toLocaleDateString("en-BH", { day: "numeric", month: "short", year: "numeric" })}</td>
+                <td><span class="status-badge status-confirmed">Active</span></td>
+                <td onclick="event.stopPropagation()">
+                    <div style="display:flex;gap:5px">
+                        <button class="btn" style="padding:5px 8px;font-size:0.7rem"
+                            onclick="window.location.href='patient-details.html?id=${p.id}'">Details</button>
+                        <button class="btn btn-primary" style="padding:5px 8px;font-size:0.7rem"
+                            onclick="window.location.href='appointments.html?patient_id=${p.id}'">Book</button>
+                    </div>
+                </td>
+            </tr>`,
+          )
+          .join("");
+      }
 
-        fetchPatients();
-
-        // Search logic
-        const searchInput = document.getElementById('patient-search');
-        searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('.patient-row');
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(term) ? 'table-row' : 'none';
-            });
+      let searchTimer;
+      document
+        .getElementById("patient-search")
+        .addEventListener("input", (e) => {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(
+            () => fetchPatients(e.target.value.trim()),
+            300,
+          );
         });
-    </script>
 
-</body>
+      window.onAuthReady = () => fetchPatients();
+    </script>
+  </body>
 </html>
